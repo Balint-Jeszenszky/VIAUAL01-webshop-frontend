@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 interface LoginProps {
     setLoggedin(params: boolean): void;
-    setUserID(id: number): void;
+    setUserID(id: string): void;
 }
 
 const Login: React.FC<LoginProps> = props => {

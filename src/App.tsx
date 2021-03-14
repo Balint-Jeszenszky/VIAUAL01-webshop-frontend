@@ -4,11 +4,14 @@ import Auth from './auth/Auth';
 import Navbar from './common/Navbar';
 import Recommended from './products/Recommended';
 import ProductPage from './products/ProductPage';
+import Products from './products/Products';
+import SearchResult from './products/SearchResult';
+import Profile from './profile/Profile';
 import './App.css';
 
 const App: React.FC = () => {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
-    const [userID, setUserID] = useState<number>(0);
+    const [userID, setUserID] = useState<string>('0');
 
     return (
         <>
@@ -23,8 +26,8 @@ const App: React.FC = () => {
                 <Route exact path='/basket'>
                     {loggedIn ? <>Basket...</> : <Redirect to='/' />}
                 </Route>
-                <Route exact path='/category/:id/page/:number'>
-                    Category...
+                <Route exact path='/category/:id/page/:page'>
+                    <Products />
                 </Route>
                 <Route exact path='/orders'>
                     {loggedIn ? <>Orders...</> : <Redirect to='/' />}
@@ -36,13 +39,13 @@ const App: React.FC = () => {
                     <ProductPage />
                 </Route>
                 <Route exact path='/profile'>
-                    {loggedIn ? <>Profile...</> : <Redirect to='/' />}
+                    {loggedIn ? <Profile userID={userID} /> : <Redirect to='/' />}
                 </Route>
                 <Route exact path='/profile/edit'>
                     {loggedIn ? <>Edit profile...</> : <Redirect to='/' />}
                 </Route>
-                <Route exact path='/search/:query/page/:number'>
-                    Search...
+                <Route exact path='/search/:query/page/:page'>
+                    <SearchResult />
                 </Route>
                 <Route path='/'>
                     <Redirect to='/' />

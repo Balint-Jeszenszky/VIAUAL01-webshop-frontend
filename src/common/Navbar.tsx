@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
+import axios from 'axios';
+import { CategoryModel } from '../common/Models';
 
 interface NavbarProps {
     loggedIn: boolean;
 };
 
 const Navbar: React.FC<NavbarProps> = props => {
+
+    const [loaded, setLoaded] = useState<boolean>(false);
+    const [query, setQuery] = useState<string>('');
+    const categories = useRef<CategoryModel[]>([]);
 
     const loggedInPagenames = [
         { name: 'Categories', path: '', active: useRouteMatch('/category') !== null },
@@ -21,6 +27,27 @@ const Navbar: React.FC<NavbarProps> = props => {
     const pages = (props.loggedIn ? loggedInPagenames : loggedOutPagenames).map((page, i) => {
         const active = page.active ? ' active' : '';
         const classname = `nav-item${active}`;
+        if (page.name == 'Categories') {
+            return (
+                <li className="nav-item dropdown" key='catDropdown'>
+                    <span className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {page.name}
+                    </span>
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {loaded && categories.current.map((e, i) => (
+                            <Link className="dropdown-item" to={`/category/${e.id}/page/1`} key={`cat${e.id}`}
+                                onClick={() => { if (window.innerWidth < 992) (document.querySelector(".navbar-toggler") as HTMLElement).click() }}>
+                                {e.name}
+                            </Link>))
+                        }
+                    <div className="dropdown-divider"></div>
+                        <Link className="dropdown-item" to='/' onClick={() => { if (window.innerWidth < 992) (document.querySelector(".navbar-toggler") as HTMLElement).click() }}>
+                            Recommended
+                        </Link>
+                    </div>
+                </li>
+            );
+        }
         return (
             <li className={classname} key={`nav${i}`}>
                 <Link to={page.path} className="nav-link" onClick={() => { if (window.innerWidth < 992) (document.querySelector(".navbar-toggler") as HTMLElement).click() }}>
@@ -29,6 +56,18 @@ const Navbar: React.FC<NavbarProps> = props => {
             </li>
         );
     });
+
+    const onQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(e.target.value);
+    };
+
+    useEffect(() => {
+        axios.get('http://192.168.0.2:3000/api/categories')
+        .then(res => {
+            categories.current = res.data;
+            setLoaded(true);
+        });
+    }, []);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark boxrow header">
@@ -44,8 +83,8 @@ const Navbar: React.FC<NavbarProps> = props => {
 
                 <div className="flex-grow-1 d-flex">
                     <form className="form-inline my-2 my-lg-0 flex-grow-1 flex-lg-grow-0 flex-nowrap mx-0 mx-lg-auto">
-                        <input className="form-control mr-2" type="search" placeholder="Search" aria-label="Search" />
-                        <button className="btn btn-outline-light my-2 my-sm-0" type="button">Search</button>
+                        <input className="form-control mr-2" type="search" placeholder="Search" aria-label="Search" onChange={onQueryChange} value={query} />
+                        <Link to={`/search/${query.replaceAll(' ', '+')}/page/1`}><button className="btn btn-outline-light my-2 my-sm-0" type="button">Search</button></Link>
                     </form>
                 </div>
 

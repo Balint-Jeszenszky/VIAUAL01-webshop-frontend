@@ -4,7 +4,7 @@ import Register from './Register';
 
 interface AuthProps {
     setLoggedin(params: boolean): void;
-    setUserID(id: number): void;
+    setUserID(id: string): void;
 }
 
 const Auth: React.FC<AuthProps> = props => {

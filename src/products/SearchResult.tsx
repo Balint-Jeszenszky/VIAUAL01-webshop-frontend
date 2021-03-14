@@ -7,13 +7,12 @@ import { ProductModel } from '../common/Models';
 const Products: React.FC = () => {
     let products = useRef<ProductModel[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
-    const params: {id: string, page: string} = useParams();
+    const params: {query: string, page: string} = useParams();
 
     useEffect(() => {
-        setLoaded(false);
-        products.current = [];
-        axios.get(`http://192.168.0.2:3000/api/products/${params.id}/page/${params.page}`)
+        axios.get(`http://192.168.0.2:3000/api/products/search/${params.query}/page/${params.page}`)
         .then(res => {
+            setLoaded(false);
             products.current = res.data;
             setLoaded(true);
         });
