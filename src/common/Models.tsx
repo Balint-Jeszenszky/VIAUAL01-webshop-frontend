@@ -27,8 +27,14 @@ export type OrderProductModel = {
     amount: number
 };
 
+type MapsAPIModel = {
+    APIKey: string,
+    coords: { lng: number, lat: number }
+}
+
 export type OrderModel = {
     id: string,
     date: Date,
-    products: OrderProductModel[]
+    products: OrderProductModel[],
+    mapsAPI: MapsAPIModel | undefined
 };

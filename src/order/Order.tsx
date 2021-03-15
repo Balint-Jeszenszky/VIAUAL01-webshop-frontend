@@ -6,16 +6,44 @@ import axios from 'axios';
 const Order: React.FC = () => {
     let order = useRef<OrderModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
-    const params: {id: string} = useParams();
+    const params: { id: string } = useParams();
 
     useEffect(() => {
         axios.get(`http://192.168.0.2:3000/api/order/${params.id}`)
-        .then(res => {
-            order.current = res.data;
-            setLoaded(true);
-        });
+            .then(res => {
+                order.current = res.data;
+                setLoaded(true);
+            });
     }, [params]);
 
+    useEffect(() => {
+        if (loaded) {
+            const initMap = () => {
+                const map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
+                    center: order.current?.mapsAPI?.coords,
+                    zoom: 18,
+                });
+                const marker = new google.maps.Marker({
+                    position: order.current?.mapsAPI?.coords,
+                    map,
+                    icon: 'http://maps.google.com/mapfiles/kml/shapes/truck.png'
+                });
+            };
+
+            let scriptNode = document.querySelector('#mapsScript') as HTMLScriptElement;
+            if (scriptNode === null) {
+                scriptNode = document.createElement('script');
+                scriptNode.src = `https://maps.googleapis.com/maps/api/js?key=${order.current?.mapsAPI?.APIKey}`;
+                scriptNode.onload = initMap;
+                scriptNode.async = true;
+                scriptNode.defer = true;
+                scriptNode.id = 'mapsScript';
+                document.body.appendChild(scriptNode);
+            } else {
+                initMap();
+            }
+        }
+    }, [loaded]);
 
     return (
         <div className="container">
@@ -43,6 +71,9 @@ const Order: React.FC = () => {
                     </tr>
                 </tbody>
             </table>
+            <div className='col-12'>
+                <div id='map'></div>
+            </div>
         </div>
     );
 }

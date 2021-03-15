@@ -10,7 +10,7 @@ const Admin: React.FC = () => {
                     <h1>Manage orders</h1>
                     <form className='form-inline'>
                         <select className='form-control w-50'>
-                            <option selected>Choose...</option>
+                            <option >Choose...</option>
                             {/* <option value="">{}</option> */}
                         </select>
                         <button className='btn btn-primary'>Edit</button>
@@ -21,7 +21,7 @@ const Admin: React.FC = () => {
                     <h3>Add new</h3>
                     <form className='form-inline'>
                         <select className='form-control w-50'>
-                            <option selected>Choose...</option>
+                            <option >Choose...</option>
                             {/* <option value="">{}</option> */}
                         </select>
                         <button className='btn btn-primary'>Add</button>
@@ -29,7 +29,7 @@ const Admin: React.FC = () => {
                     <h3>Remove</h3>
                     <form className='form-inline'>
                         <select className='form-control w-50'>
-                            <option selected>Choose...</option>
+                            <option >Choose...</option>
                             {/* <option value="">{}</option> */}
                         </select>
                         <button className='btn btn-danger'>Remove</button>
@@ -40,7 +40,7 @@ const Admin: React.FC = () => {
                     <h3>Add new</h3>
                     <form className='form-inline'>
                         <select className='form-control w-50'>
-                            <option selected>Choose...</option>
+                            <option >Choose...</option>
                             {/* <option value="">{}</option> */}
                         </select>
                         <button className='btn btn-primary'>Add</button>
@@ -48,7 +48,7 @@ const Admin: React.FC = () => {
                     <h3>Remove</h3>
                     <form className='form-inline'>
                         <select className='form-control w-50'>
-                            <option selected>Choose...</option>
+                            <option >Choose...</option>
                             {/* <option value="">{}</option> */}
                         </select>
                         <button className='btn btn-danger'>Remove</button>
@@ -59,7 +59,7 @@ const Admin: React.FC = () => {
                     <h3>Add new</h3>
                     <form className='form-inline'>
                         <select className='form-control w-50'>
-                            <option selected>Choose...</option>
+                            <option >Choose...</option>
                             {/* <option value="">{}</option> */}
                         </select>
                         <button className='btn btn-primary'>Add</button>
@@ -67,7 +67,7 @@ const Admin: React.FC = () => {
                     <h3>Remove</h3>
                     <form className='form-inline'>
                         <select className='form-control w-50'>
-                            <option selected>Choose...</option>
+                            <option >Choose...</option>
                             {/* <option value="">{}</option> */}
                         </select>
                         <button className='btn btn-danger'>Remove</button>
