@@ -20,4 +20,15 @@ export type UserModel = {
     email: string,
     address: string,
     phoneNumber: string
-}
+};
+
+export type OrderProductModel = {
+    product: ProductModel,
+    amount: number
+};
+
+export type OrderModel = {
+    id: string,
+    date: Date,
+    products: OrderProductModel[]
+};

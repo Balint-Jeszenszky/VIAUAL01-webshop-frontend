@@ -15,6 +15,7 @@ const Navbar: React.FC<NavbarProps> = props => {
 
     const loggedInPagenames = [
         { name: 'Categories', path: '', active: useRouteMatch('/category') !== null },
+        { name: 'Cart', path: '/cart', active: useRouteMatch('/cart') !== null },
         { name: 'Profile', path: '/profile', active: useRouteMatch('/profile') !== null },
         { name: 'Logout', path: '/logout', active: false }
     ];
@@ -23,6 +24,8 @@ const Navbar: React.FC<NavbarProps> = props => {
         { name: 'Categories', path: '', active: useRouteMatch('/category') !== null },
         { name: 'Login', path: '/auth', active: false }
     ];
+
+    const closeNavbar = () => { if (window.innerWidth < 992) (document.querySelector(".navbar-toggler") as HTMLElement).click() }
 
     const pages = (props.loggedIn ? loggedInPagenames : loggedOutPagenames).map((page, i) => {
         const active = page.active ? ' active' : '';
@@ -36,12 +39,12 @@ const Navbar: React.FC<NavbarProps> = props => {
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                         {loaded && categories.current.map((e, i) => (
                             <Link className="dropdown-item" to={`/category/${e.id}/page/1`} key={`cat${e.id}`}
-                                onClick={() => { if (window.innerWidth < 992) (document.querySelector(".navbar-toggler") as HTMLElement).click() }}>
+                                onClick={closeNavbar}>
                                 {e.name}
                             </Link>))
                         }
                     <div className="dropdown-divider"></div>
-                        <Link className="dropdown-item" to='/' onClick={() => { if (window.innerWidth < 992) (document.querySelector(".navbar-toggler") as HTMLElement).click() }}>
+                        <Link className="dropdown-item" to='/' onClick={closeNavbar}>
                             Recommended
                         </Link>
                     </div>
@@ -50,7 +53,7 @@ const Navbar: React.FC<NavbarProps> = props => {
         }
         return (
             <li className={classname} key={`nav${i}`}>
-                <Link to={page.path} className="nav-link" onClick={() => { if (window.innerWidth < 992) (document.querySelector(".navbar-toggler") as HTMLElement).click() }}>
+                <Link to={page.path} className="nav-link" onClick={closeNavbar}>
                     {page.name}
                 </Link>
             </li>
@@ -84,10 +87,13 @@ const Navbar: React.FC<NavbarProps> = props => {
                 <div className="flex-grow-1 d-flex">
                     <form className="form-inline my-2 my-lg-0 flex-grow-1 flex-lg-grow-0 flex-nowrap mx-0 mx-lg-auto">
                         <input className="form-control mr-2" type="search" placeholder="Search" aria-label="Search" onChange={onQueryChange} value={query} />
-                        <Link to={`/search/${query.replaceAll(' ', '+')}/page/1`}><button className="btn btn-outline-light my-2 my-sm-0" type="button">Search</button></Link>
+                        <Link to={`/search/${query.replaceAll(' ', '+')}/page/1`} onClick={closeNavbar}>
+                            <button className="btn btn-outline-light my-2 my-sm-0" type="button">
+                                Search
+                            </button>
+                        </Link>
                     </form>
                 </div>
-
                     <ul className="navbar-nav ml-auto">
                         {pages}
                     </ul>
