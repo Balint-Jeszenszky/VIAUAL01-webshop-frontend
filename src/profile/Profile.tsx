@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserModel, OrderModel } from '../common/Models'
+import { UserContext } from '../common/UserContext';
 
-interface ProfileProps {
-    userID: string;
-};
-
-const Profile: React.FC<ProfileProps> = props => {
+const Profile: React.FC = () => {
     const [userLoaded, setUserLoaded] = useState<boolean>(false);
     const [oredersLoaded, setOredersLoaded] = useState<boolean>(false);
     const profile = useRef<UserModel>();
     const orders = useRef<OrderModel[]>([]);
 
+    const userID = useContext(UserContext);
+
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/profile/${props.userID}`)
+        axios.get(`http://192.168.0.2:3000/api/profile/${userID}`)
         .then(res => {
             profile.current = res.data;
             setUserLoaded(true);
@@ -22,7 +21,7 @@ const Profile: React.FC<ProfileProps> = props => {
     }, []);
 
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/orders/${props.userID}`)
+        axios.get(`http://192.168.0.2:3000/api/orders/${userID}`)
         .then(res => {
             orders.current = res.data;
             orders.current = orders.current.map(e => {e.date = new Date(e.date); return e});
@@ -32,7 +31,7 @@ const Profile: React.FC<ProfileProps> = props => {
 
     return (
         <>
-            {!(oredersLoaded && userLoaded) && <div className='loader'></div> }
+            {!(oredersLoaded && userLoaded) && <div className='container'><div className='loader'></div></div>}
             {(oredersLoaded && userLoaded) && <div className='container mt-3'>
                 <div className='row'>
                     <div className='col-12 col-md-6'>

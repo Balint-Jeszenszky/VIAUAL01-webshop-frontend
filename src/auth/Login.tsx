@@ -19,6 +19,7 @@ const Login: React.FC<LoginProps> = props => {
 
     const login = () => {
         //axios post
+        props.setUserID('ADMIN');
         props.setLoggedin(true);
     } 
 

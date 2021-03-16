@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
 import axios from 'axios';
+import { UserContext } from '../common/UserContext';
+import { CurrencyContext } from '../common/CurrencyContext';
 
 const Product: React.FC = () => {
     const params: {id: string} = useParams();
     const [quantity, setQuantity] = useState<number>(1);
     let product = useRef<ProductModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
+    const currency = useContext(CurrencyContext);
 
     useEffect(() => {
         axios.get(`http://192.168.0.2:3000/api/product/${params.id}`)
@@ -23,7 +26,7 @@ const Product: React.FC = () => {
 
     return (
         <>
-            {!loaded && <div className='loader'></div> }
+            {!loaded && <div className='container'><div className='loader'></div></div> }
             {loaded && <div className='container mt-3'>
                 <p><Link to='/'>Home</Link> {' > '} <Link to={`/category/${product.current?.categoryID}/page/1`}>{product.current?.categoryID}</Link></p>
                 <div className='row'>
@@ -32,6 +35,7 @@ const Product: React.FC = () => {
                     </div>
                     <div className='col-12 col-md-6 d-flex align-items-start flex-column'>
                         <h1 className='mb-auto'>{product.current?.name}</h1>
+                        <h2>{product.current?.price[currency]} {currency}</h2>
                         <p>Stock: {product.current?.stock} pieces</p>
                         <form>
                             <div className='input-group input-group-sm'>

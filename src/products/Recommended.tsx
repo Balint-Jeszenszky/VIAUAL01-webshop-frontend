@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import Product from './Product';
 import { Link } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
+import { CurrencyContext } from '../common/CurrencyContext';
 
 const Recommended: React.FC = () => {
     let products = useRef<ProductModel[]>([]);
     let specialOffer = useRef<ProductModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
     const link = `/product/${specialOffer.current?.id}`;
+    const currency = useContext(CurrencyContext);
 
     useEffect(() => {
         axios.get('http://192.168.0.2:3000/api/products')
@@ -21,7 +23,7 @@ const Recommended: React.FC = () => {
 
     return (
         <>
-            {!loaded &&  <div className='loader'></div>}
+            {!loaded && <div className='container'><div className='loader'></div></div>}
             {loaded && <div className='container'>
                 <header className='mt-3 col-12'>
                     <div className='card product-card d-none d-md-block'>
@@ -37,6 +39,7 @@ const Recommended: React.FC = () => {
                         </div>
                         <div className='card-footer d-flex justify-content-between'>
                             <Link to={link} className='card-link smaller'><span className='dark-link'>Details</span></Link>
+                            <span>{specialOffer.current?.price[currency]} {currency}</span>
                         </div>
                     </div>
 
@@ -51,6 +54,7 @@ const Recommended: React.FC = () => {
                         </div>
                         <div className='card-footer d-flex justify-content-between'>
                             <Link to={link} className='card-link smaller'><span className='dark-link'>Details</span></Link>
+                            <span>{specialOffer.current?.price[currency]} {currency}</span>
                         </div>
                     </div>
                 </header>

@@ -1,13 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserModel } from '../common/Models';
 import axios from 'axios';
+import { UserContext } from '../common/UserContext';
 
-interface EditProfileProps {
-    userID: string;
-};
-
-const EditProfile: React.FC<EditProfileProps> = props => {
+const EditProfile: React.FC = () => {
     const [loaded, setLoaded] = useState<boolean>(false);
     const user = useRef<UserModel>();
     const [name, setName] = useState<string>('');
@@ -19,8 +16,10 @@ const EditProfile: React.FC<EditProfileProps> = props => {
     const [newPass, setNewPass] = useState<string>('');
     const [confirmPass, setConfirmPass] = useState<string>('');
 
+    const userID = useContext(UserContext);
+
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/profile/${props.userID}`)
+        axios.get(`http://192.168.0.2:3000/api/profile/${userID}`)
             .then(res => {
                 user.current = res.data;
                 setName(res.data.name);

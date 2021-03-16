@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { OrderModel } from '../common/Models';
 import axios from 'axios';
+import { CurrencyContext } from '../common/CurrencyContext';
 
 const Order: React.FC = () => {
     let order = useRef<OrderModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
     const params: { id: string } = useParams();
+    const currency = useContext(CurrencyContext);
 
     useEffect(() => {
         axios.get(`http://192.168.0.2:3000/api/order/${params.id}`)
@@ -60,14 +62,14 @@ const Order: React.FC = () => {
                     {loaded && order.current?.products.map(e => (
                         <tr key={`orderRow${e.product.id}`}>
                             <td><Link to={`/product/${e.product.id}`}>{e.product.name}</Link></td>
-                            <td>{e.product.price}</td>
+                            <td>{e.product.price[currency]} {currency}</td>
                             <td className='w-25'>{e.amount}</td>
-                            <td>{e.amount * e.product.price}</td>
+                            <td>{(e.amount * e.product.price[currency]).toFixed(3)} {currency}</td>
                         </tr>
                     ))}
                     <tr>
                         <td colSpan={3} className='text-right'>Total:</td>
-                        <td>{order.current?.products.map(e => e.amount * e.product.price).reduce((acc, cur) => acc + cur)}</td>
+                        <td>{order.current?.products.map(e => e.amount * e.product.price[currency]).reduce((acc, cur) => acc + cur).toFixed(3)} {currency}</td>
                     </tr>
                 </tbody>
             </table>

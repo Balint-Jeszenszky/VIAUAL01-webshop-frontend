@@ -1,9 +1,42 @@
+html, body {
+    height: 100%
+}
+
+#root {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
 .card {
     height: 100%;
 }
 
+.container {
+    flex: 1 1 auto;
+}
+
 .product-card {
     border-color: black;
+}
+
+.footer-dark {
+    background-color: #000;
+    color: #fff;
+}
+
+.selected {
+    text-shadow: 0 0 3px #ffffff;
+}
+
+.available {
+    color: #b4b4b4;
+    cursor: pointer;
+}
+
+#map {
+    width: 100%;
+    height: 600px;
 }
 
 .loader {
@@ -23,9 +56,4 @@
     100% {
         transform: rotate(360deg);
     }
-}
-
-#map {
-    width: 100%;
-    height: 600px;
 }

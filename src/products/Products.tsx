@@ -21,7 +21,7 @@ const Products: React.FC = () => {
 
     return (
         <>
-            {!loaded && <div className='loader'></div>}
+            {!loaded && <div className='container'><div className='loader'></div></div>}
             {loaded && <div className='container'>
                 <div className='mt-3 p-3'>
                     <div className='row'>

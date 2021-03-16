@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                 <div className="flex-grow-1 d-flex">
                     <form className="form-inline my-2 my-lg-0 flex-grow-1 flex-lg-grow-0 flex-nowrap mx-0 mx-lg-auto">
                         <input className="form-control mr-2" type="search" placeholder="Search" aria-label="Search" onChange={onQueryChange} value={query} />
-                        <Link to={`/search/${query.replaceAll(' ', '+')}/page/1`} onClick={closeNavbar}>
+                        <Link to={`/search/${query.trim().replace(/\s\s+/g, ' ').replaceAll(' ', '+')}/page/1`} onClick={closeNavbar}>
                             <button className="btn btn-outline-light my-2 my-sm-0" type="button">
                                 Search
                             </button>
