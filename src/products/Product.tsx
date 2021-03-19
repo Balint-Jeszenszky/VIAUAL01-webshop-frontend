@@ -14,7 +14,9 @@ const Product: React.FC<ProductProps> = props => {
     return (
         <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
             <div className="card product-card">
-                <Link to={link}><img src={`/images/${props.product.imageURL}`} className="card-img-top" alt={props.product.name} /></Link>
+                <div className="card-img-wrapper">
+                    <Link to={link}><img src={`/images/${props.product.imageURL}`} className="card-img-top img-fluid" alt={props.product.name} /></Link>
+                </div>
                 <div className="card-body">
                     <h5 className="card-title"><Link to={link} className="text-dark">{props.product.name}</Link></h5>
                     <p className="card-text">{props.product.description}</p>

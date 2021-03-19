@@ -39,6 +39,27 @@ html, body {
     height: 600px;
 }
 
+.card-img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img-wrapper:after {
+    content: '';
+    display: block;
+    padding-top: 75%;
+}
+
+.card-img-wrapper img {
+    width: auto;
+    height: 100%;
+    max-width: none;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
 .loader {
     margin: 5vh auto;
     border: 5px solid #f3f3f3;

@@ -35,7 +35,9 @@ const Recommended: React.FC = () => {
                                 <h5 className='card-title'><Link to={link} className='text-dark'>{specialOffer.current?.name}</Link></h5>
                                 <p className='card-text'>{specialOffer.current?.description}</p>
                             </div>
-                            <Link to={link} className='col-4'><img src={`/images/${specialOffer.current?.imageURL}`} className='img-fluid' alt={specialOffer.current?.name} /></Link>
+                            <div className="col-4 card-img-wrapper">
+                                <Link to={link}><img src={`/images/${specialOffer.current?.imageURL}`} className='img-fluid' alt={specialOffer.current?.name} /></Link>
+                            </div>
                         </div>
                         <div className='card-footer d-flex justify-content-between'>
                             <Link to={link} className='card-link smaller'><span className='dark-link'>Details</span></Link>
@@ -47,7 +49,10 @@ const Recommended: React.FC = () => {
                         <div className='card-header'>
                             Special offer
                         </div>
-                        <Link to={link}><img src={`/images/${specialOffer.current?.imageURL}`} className='card-img-top' alt={specialOffer.current?.name} /></Link>
+                        <div className="card-img-wrapper">
+                            <Link to={link}><img src={`/images/${specialOffer.current?.imageURL}`} className='card-img-top img-fluid' alt={specialOffer.current?.name} /></Link>
+                        </div>
+                        
                         <div className='card-body'>
                             <h5 className='card-title'><Link to={link} className='text-dark'>{specialOffer.current?.name}</Link></h5>
                             <p className='card-text'>{specialOffer.current?.description}</p>

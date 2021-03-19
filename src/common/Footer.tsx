@@ -20,7 +20,7 @@ const Footer: React.FC<IFooter> = props => {
     }, []);
 
     return (
-        <footer className="footer-dark">
+        <footer className="footer-dark mt-3">
             <div className="container p-3">
                 <span>Available currencies: </span>
                 {loaded && currencies.current.map((e, i) => (
