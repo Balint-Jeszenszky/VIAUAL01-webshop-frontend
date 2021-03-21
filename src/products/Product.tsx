@@ -2,12 +2,13 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CurrencyContext } from '../common/CurrencyContext';
 import { ProductModel } from '../common/Models';
+import formatPrice from '../common/formatPrice';
 
-interface ProductProps {
+interface IProduct {
     product: ProductModel;
 };
 
-const Product: React.FC<ProductProps> = props => {
+const Product: React.FC<IProduct> = props => {
     const link = `/product/${props.product.id}`;
     const currency = useContext(CurrencyContext);
 
@@ -23,7 +24,7 @@ const Product: React.FC<ProductProps> = props => {
                 </div>
                 <div className="card-footer d-flex justify-content-between">
                     <Link to={link} className="card-link smaller"><span className="dark-link">Details</span></Link>
-                    <span>{props.product.price[currency]} {currency}</span>
+                    <span>{formatPrice(props.product.price[currency])} {currency}</span>
                 </div>
             </div>
         </div>

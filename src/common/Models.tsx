@@ -12,9 +12,20 @@ export type ProductModel = {
     stock: number
 };
 
+type Order = {
+    id: string,
+    date: Date
+}
+
 export type CategoryModel = {
     id: string,
-    name: string
+    name: string,
+    productNumber: number
+};
+
+export type ListItem = {
+    product: ProductModel,
+    amount: number
 };
 
 export type UserModel = {
@@ -23,12 +34,9 @@ export type UserModel = {
     username: string,
     email: string,
     address: string,
-    phoneNumber: string
-};
-
-export type OrderProductModel = {
-    product: ProductModel,
-    amount: number
+    phoneNumber: string,
+    orders: Order[],
+    cart: ListItem[]
 };
 
 type MapsAPIModel = {
@@ -39,6 +47,6 @@ type MapsAPIModel = {
 export type OrderModel = {
     id: string,
     date: Date,
-    products: OrderProductModel[],
+    products: ListItem[],
     mapsAPI: MapsAPIModel | undefined
 };

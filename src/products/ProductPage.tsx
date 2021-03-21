@@ -4,6 +4,7 @@ import { ProductModel } from '../common/Models';
 import axios from 'axios';
 import { UserContext } from '../common/UserContext';
 import { CurrencyContext } from '../common/CurrencyContext';
+import formatPrice from '../common/formatPrice';
 
 const Product: React.FC = () => {
     const params: {id: string} = useParams();
@@ -35,7 +36,7 @@ const Product: React.FC = () => {
                     </div>
                     <div className='col-12 col-md-6 d-flex align-items-start flex-column'>
                         <h1 className='mb-auto'>{product.current?.name}</h1>
-                        <h2>{product.current?.price[currency]} {currency}</h2>
+                        <h2>{formatPrice(product.current!.price[currency])} {currency}</h2>
                         <p>Stock: {product.current?.stock} pieces</p>
                         <form>
                             <div className='input-group input-group-sm'>

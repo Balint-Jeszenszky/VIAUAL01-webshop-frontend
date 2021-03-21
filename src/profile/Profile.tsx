@@ -1,38 +1,27 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { UserModel, OrderModel } from '../common/Models'
+import { UserModel } from '../common/Models'
 import { UserContext } from '../common/UserContext';
 
 const Profile: React.FC = () => {
-    const [userLoaded, setUserLoaded] = useState<boolean>(false);
-    const [oredersLoaded, setOredersLoaded] = useState<boolean>(false);
+    const [loaded, setLoaded] = useState<boolean>(false);
     const profile = useRef<UserModel>();
-    const orders = useRef<OrderModel[]>([]);
 
     const userID = useContext(UserContext);
 
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/profile/${userID}`)
+        axios.get(`http://192.168.0.2:3000/api/user/${userID}`)
         .then(res => {
             profile.current = res.data;
-            setUserLoaded(true);
-        });
-    }, []);
-
-    useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/orders/${userID}`)
-        .then(res => {
-            orders.current = res.data;
-            orders.current = orders.current.map(e => {e.date = new Date(e.date); return e});
-            setOredersLoaded(true);
+            setLoaded(true);
         });
     }, []);
 
     return (
         <>
-            {!(oredersLoaded && userLoaded) && <div className='container'><div className='loader'></div></div>}
-            {(oredersLoaded && userLoaded) && <div className='container mt-3'>
+            {!loaded && <div className='container'><div className='loader'></div></div>}
+            {loaded && <div className='container mt-3'>
                 <div className='row'>
                     <div className='col-12 col-md-6'>
                         <h1>Your details:</h1>
@@ -58,8 +47,8 @@ const Profile: React.FC = () => {
                     </div>
                     <div className='col-12 col-md-6'>
                         <h1>Your orders:</h1>
-                        <div className='col-6'>
-                            {orders.current.map((e, i) => (<p key={`orderLink${i}`}><Link to={`/order/${e.id}`}>{e.date.toLocaleDateString()} - {e.id}</Link></p>))}
+                        <div>
+                            {profile.current?.orders.map((e, i) => (<p key={`orderLink${i}`}><Link to={`/order/${e.id}`}>{new Date(e.date).toLocaleDateString()} - {e.id}</Link></p>))}
                         </div>
                     </div>
                 </div>

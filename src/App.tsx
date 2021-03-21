@@ -14,17 +14,20 @@ import Admin from './admin/Admin';
 import Footer from './common/Footer';
 import { UserContext } from './common/UserContext';
 import { CurrencyContext } from './common/CurrencyContext';
+import { CategoriesContext } from './common/CategoriesContext';
+import { CategoryModel } from './common/Models';
 import './App.css';
 
 const App: React.FC = () => {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [userID, setUserID] = useState<string>('');
     const [currency, setCurrency] = useState<string>('HUF');
+    const [categories, setCategories] = useState<CategoryModel[]>([]);
 
     return (
         <UserContext.Provider value={userID}>
             <CurrencyContext.Provider value={currency}>
-                <Navbar loggedIn={loggedIn} />
+                <Navbar loggedIn={loggedIn} setCategories={setCategories} />
                 <Switch>
                     <Route exact path='/'>
                         <Recommended />
@@ -39,7 +42,9 @@ const App: React.FC = () => {
                         {loggedIn ? <Cart /> : <Redirect to='/' />}
                     </Route>
                     <Route exact path='/category/:id/page/:page'>
-                        <Products />
+                        <CategoriesContext.Provider value={categories}>
+                            <Products />
+                        </CategoriesContext.Provider>
                     </Route>
                     <Route exact path='/order/:id'>
                         {loggedIn ? <Order /> : <Redirect to='/' />}

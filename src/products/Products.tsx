@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import Product from './Product';
-import { useParams } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
+import Pager from '../common/Pager';
+import { CategoriesContext } from '../common/CategoriesContext';
 
 const Products: React.FC = () => {
     let products = useRef<ProductModel[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
-    const params: {id: string, page: string} = useParams();
+    const match = useRouteMatch();
+    const params = match.params as {id: string, page: string};
+    const pages = useContext(CategoriesContext).filter(e => e.id === params.id)[0]?.productNumber;
 
     useEffect(() => {
         setLoaded(false);
@@ -27,6 +31,7 @@ const Products: React.FC = () => {
                     <div className='row'>
                         {products.current.map((e, i) => <Product product={e} key={`product${i}`} />)}
                     </div>
+                    <Pager url={match.path.replace(':id', params.id)} currentPage={parseInt(params.page)} allPages={pages}></Pager>
                 </div>
             </div>}
         </>

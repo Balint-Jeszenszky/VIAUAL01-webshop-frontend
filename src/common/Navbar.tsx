@@ -3,11 +3,12 @@ import { Link, useRouteMatch } from 'react-router-dom';
 import axios from 'axios';
 import { CategoryModel } from '../common/Models';
 
-interface NavbarProps {
+interface INavbar {
     loggedIn: boolean;
+    setCategories(categories: CategoryModel[]): void
 };
 
-const Navbar: React.FC<NavbarProps> = props => {
+const Navbar: React.FC<INavbar> = props => {
 
     const [loaded, setLoaded] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
@@ -68,6 +69,7 @@ const Navbar: React.FC<NavbarProps> = props => {
         axios.get('http://192.168.0.2:3000/api/categories')
         .then(res => {
             categories.current = res.data;
+            props.setCategories(res.data);
             setLoaded(true);
         });
     }, []);

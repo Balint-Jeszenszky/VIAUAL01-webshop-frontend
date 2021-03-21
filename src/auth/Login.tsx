@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 
-interface LoginProps {
+interface ILogin {
     setLoggedin(params: boolean): void;
     setUserID(id: string): void;
 }
 
-const Login: React.FC<LoginProps> = props => {
+const Login: React.FC<ILogin> = props => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [wronCredentials, setWronCredentials] = useState<boolean>(false);
@@ -19,7 +19,7 @@ const Login: React.FC<LoginProps> = props => {
 
     const login = () => {
         //axios post
-        props.setUserID('ADMIN');
+        props.setUserID('6054be185572f1d30f0e0ff7');
         props.setLoggedin(true);
     } 
 

@@ -19,7 +19,7 @@ const EditProfile: React.FC = () => {
     const userID = useContext(UserContext);
 
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/profile/${userID}`)
+        axios.get(`http://192.168.0.2:3000/api/user/${userID}`)
             .then(res => {
                 user.current = res.data;
                 setName(res.data.name);

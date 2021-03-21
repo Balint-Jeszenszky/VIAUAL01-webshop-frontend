@@ -4,6 +4,7 @@ import Product from './Product';
 import { Link } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
 import { CurrencyContext } from '../common/CurrencyContext';
+import formatPrice from '../common/formatPrice';
 
 const Recommended: React.FC = () => {
     let products = useRef<ProductModel[]>([]);
@@ -41,7 +42,7 @@ const Recommended: React.FC = () => {
                         </div>
                         <div className='card-footer d-flex justify-content-between'>
                             <Link to={link} className='card-link smaller'><span className='dark-link'>Details</span></Link>
-                            <span>{specialOffer.current?.price[currency]} {currency}</span>
+                            <span>{formatPrice(specialOffer.current!.price[currency])} {currency}</span>
                         </div>
                     </div>
 
@@ -59,7 +60,7 @@ const Recommended: React.FC = () => {
                         </div>
                         <div className='card-footer d-flex justify-content-between'>
                             <Link to={link} className='card-link smaller'><span className='dark-link'>Details</span></Link>
-                            <span>{specialOffer.current?.price[currency]} {currency}</span>
+                            <span>{formatPrice(specialOffer.current!.price[currency])} {currency}</span>
                         </div>
                     </div>
                 </header>
