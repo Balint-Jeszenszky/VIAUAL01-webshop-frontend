@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
 import axios from 'axios';
-import { UserContext } from '../common/UserContext';
 import { CurrencyContext } from '../common/CurrencyContext';
 import formatPrice from '../common/formatPrice';
 

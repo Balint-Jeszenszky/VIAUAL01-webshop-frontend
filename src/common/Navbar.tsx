@@ -31,7 +31,7 @@ const Navbar: React.FC<INavbar> = props => {
     const pages = (props.loggedIn ? loggedInPagenames : loggedOutPagenames).map((page, i) => {
         const active = page.active ? ' active' : '';
         const classname = `nav-item${active}`;
-        if (page.name == 'Categories') {
+        if (page.name === 'Categories') {
             return (
                 <li className="nav-item dropdown" key='catDropdown'>
                     <span className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

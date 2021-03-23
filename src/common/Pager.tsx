@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface IPager {
     url: string;
@@ -14,25 +15,25 @@ const Products: React.FC<IPager> = props => {
     const pages = [];
 
     if (start !== 1)
-        pages.push(<li className="page-item disabled" key="pagerdotbefore"><a className="page-link" href="#">...</a></li>)
+        pages.push(<li className="page-item disabled" key="pagerdotbefore"><Link className="page-link" to="#">...</Link></li>)
 
     for (let i = start; i <= end; i++) {
-        pages.push(<li className={`page-item${(props.currentPage === i) ? ' active' : ''}`} key={`pager${i}`}><a className="page-link" href={props.url.replace(':page', i.toString())}>{i}</a></li>)
+        pages.push(<li className={`page-item${(props.currentPage === i) ? ' active' : ''}`} key={`pager${i}`}><Link className="page-link" to={props.url.replace(':page', i.toString())}>{i}</Link></li>)
     }
 
     if (end !== props.allPages)
-        pages.push(<li className="page-item disabled" key="pagerdotafter"><a className="page-link" href="#">...</a></li>)
+        pages.push(<li className="page-item disabled" key="pagerdotafter"><Link className="page-link" to="#">...</Link></li>)
 
     return (
         <div>
             <nav aria-label="Page navigation example">
                 <ul className="pagination justify-content-center">
                     <li className={`page-item${(props.currentPage === 1) ? ' disabled' : ''}`}>
-                        <a className="page-link" href={props.url.replace(':page', (props.currentPage - 1).toString())} tabIndex={-1} aria-disabled="true">&laquo;</a>
+                        <Link className="page-link" to={props.url.replace(':page', (props.currentPage - 1).toString())} tabIndex={-1} aria-disabled="true">&laquo;</Link>
                     </li>
                     {pages}
                     <li className={`page-item${(props.currentPage === props.allPages) ? ' disabled' : ''}`}>
-                        <a className="page-link" href={props.url.replace(':page', (props.currentPage + 1).toString())}>&raquo;</a>
+                        <Link className="page-link" to={props.url.replace(':page', (props.currentPage + 1).toString())}>&raquo;</Link>
                     </li>
                 </ul>
             </nav>

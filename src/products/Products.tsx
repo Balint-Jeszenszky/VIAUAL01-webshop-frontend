@@ -11,7 +11,7 @@ const Products: React.FC = () => {
     const [loaded, setLoaded] = useState<boolean>(false);
     const match = useRouteMatch();
     const params = match.params as {id: string, page: string};
-    const pages = useContext(CategoriesContext).filter(e => e.id === params.id)[0]?.productNumber;
+    const pages = Math.ceil(useContext(CategoriesContext).filter(e => e.id === params.id)[0]?.productNumber / 18);
 
     useEffect(() => {
         setLoaded(false);
@@ -30,8 +30,9 @@ const Products: React.FC = () => {
                 <div className='mt-3 p-3'>
                     <div className='row'>
                         {products.current.map((e, i) => <Product product={e} key={`product${i}`} />)}
+                        {(products.current.length === 0) && <h1>No results</h1>}
                     </div>
-                    <Pager url={match.path.replace(':id', params.id)} currentPage={parseInt(params.page)} allPages={pages}></Pager>
+                    {(pages > 1) && <Pager url={match.path.replace(':id', params.id)} currentPage={parseInt(params.page)} allPages={pages}></Pager>}
                 </div>
             </div>}
         </>

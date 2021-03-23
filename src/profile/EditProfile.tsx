@@ -5,7 +5,6 @@ import axios from 'axios';
 import { UserContext } from '../common/UserContext';
 
 const EditProfile: React.FC = () => {
-    const [loaded, setLoaded] = useState<boolean>(false);
     const user = useRef<UserModel>();
     const [name, setName] = useState<string>('');
     const [username, setUsername] = useState<string>('');

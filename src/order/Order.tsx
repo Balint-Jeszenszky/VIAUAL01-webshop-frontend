@@ -26,7 +26,7 @@ const Order: React.FC = () => {
                     center: order.current?.mapsAPI?.coords,
                     zoom: 18,
                 });
-                const marker = new google.maps.Marker({
+                new google.maps.Marker({
                     position: order.current?.mapsAPI?.coords,
                     map,
                     icon: 'http://maps.google.com/mapfiles/kml/shapes/truck.png'
