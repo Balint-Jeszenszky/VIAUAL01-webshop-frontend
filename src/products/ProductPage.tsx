@@ -4,13 +4,17 @@ import { ProductModel } from '../common/Models';
 import axios from 'axios';
 import { CurrencyContext } from '../common/CurrencyContext';
 import formatPrice from '../common/formatPrice';
+import { UserContext } from '../common/UserContext';
 
 const Product: React.FC = () => {
     const params: {id: string} = useParams();
     const [quantity, setQuantity] = useState<number>(1);
     let product = useRef<ProductModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
+    const [added, setAdded] = useState<boolean>(false);
     const currency = useContext(CurrencyContext);
+
+    const userId = useContext(UserContext);
 
     useEffect(() => {
         axios.get(`http://192.168.0.2:3000/api/product/${params.id}`)
@@ -22,6 +26,11 @@ const Product: React.FC = () => {
 
     const onQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuantity(Number.parseInt(e.target.value));
+    }
+
+    const addToCart = () => {
+        axios.post(`http://192.168.0.2:3000/api/cart/${userId}`, {productId: product.current?.id, amount: quantity})
+        .then(res => {setAdded(true)});
     }
 
     return (
@@ -40,8 +49,8 @@ const Product: React.FC = () => {
                         <form>
                             <div className='input-group input-group-sm'>
                                 <label htmlFor="order-quantity">Quantity:</label>
-                                <input className='form-control mx-1' type="number" name="order-quantity" id="order-quantity" onChange={onQuantityChange} value={quantity} />
-                                <button className='btn btn-sm btn-primary' type="button"><i className="fas fa-shopping-cart"></i></button>
+                                <input className={`form-control mx-1${added ? ' is-valid' : ''}`} type="number" name="order-quantity" id="order-quantity" onChange={onQuantityChange} value={quantity} />
+                                <button className='btn btn-sm btn-primary' type="button" onClick={addToCart}><i className="fas fa-shopping-cart"></i></button>
                             </div>
                         </form>
                     </div>

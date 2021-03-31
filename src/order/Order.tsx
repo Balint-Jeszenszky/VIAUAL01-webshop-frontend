@@ -65,7 +65,7 @@ const Order: React.FC = () => {
                         {loaded && order.current?.products.map(e => (
                             <tr key={`orderRow${e.product.id}`}>
                                 <td><Link to={`/product/${e.product.id}`}>{e.product.name}</Link></td>
-                                <td>{e.product.price[currency]} {currency}</td>
+                                <td>{formatPrice(e.product.price[currency])} {currency}</td>
                                 <td className='w-25'>{e.amount}</td>
                                 <td>{formatPrice(e.amount * e.product.price[currency])} {currency}</td>
                             </tr>

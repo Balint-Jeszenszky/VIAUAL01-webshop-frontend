@@ -39,6 +39,16 @@ export type UserModel = {
     cart: ListItem[]
 };
 
+export type UserData = {
+    name: string,
+    email: string,
+    address: string,
+    phoneNumber: string,
+    oldPassword?: string,
+    newPassword?: string,
+    confirmPassword?: string
+}
+
 type MapsAPIModel = {
     APIKey: string,
     coords: { lng: number, lat: number }
