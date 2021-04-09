@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { UserModel } from '../common/Models'
 import { UserContext } from '../common/UserContext';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 const Profile: React.FC = () => {
     const [loaded, setLoaded] = useState<boolean>(false);
     const profile = useRef<UserModel>();
 
-    const userID = useContext(UserContext);
+    const userCtx = useContext(UserContext);
 
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/user/${userID}`)
+        webshopAPI(actions.GET, `/user/${userCtx.userId}`, userCtx)
         .then(res => {
             profile.current = res.data;
             setLoaded(true);

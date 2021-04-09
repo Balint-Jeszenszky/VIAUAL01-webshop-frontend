@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import axios from 'axios';
 import Product from './Product';
 import { useRouteMatch } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
 import Pager from '../common/Pager';
 import { CategoriesContext } from '../common/CategoriesContext';
+import webshopAPI, { actions } from '../common/webshopAPI';
+import { UserContext } from '../common/UserContext';
 
 const Products: React.FC = () => {
     let products = useRef<ProductModel[]>([]);
@@ -12,11 +13,12 @@ const Products: React.FC = () => {
     const match = useRouteMatch();
     const params = match.params as {id: string, page: string};
     const pages = Math.ceil(useContext(CategoriesContext).filter(e => e.id === params.id)[0]?.productNumber / 18);
+    const userCtx = useContext(UserContext);
 
     useEffect(() => {
         setLoaded(false);
         products.current = [];
-        axios.get(`http://192.168.0.2:3000/api/products/${params.id}/page/${params.page}`)
+        webshopAPI(actions.GET, `/products/${params.id}/page/${params.page}`, userCtx)
         .then(res => {
             products.current = res.data;
             setLoaded(true);

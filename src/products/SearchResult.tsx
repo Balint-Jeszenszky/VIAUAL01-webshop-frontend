@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import Product from './Product';
 import { useRouteMatch } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
 import Pager from '../common/Pager';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 const Products: React.FC = () => {
     let products = useRef<ProductModel[]>([]);
@@ -12,7 +12,7 @@ const Products: React.FC = () => {
     const params = match.params as {query: string, page: string};
 
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/products/search/${params.query}/page/${params.page}`)
+        webshopAPI(actions.GET, `/products/search/${params.query}/page/${params.page}`)
         .then(res => {
             setLoaded(false);
             products.current = res.data;

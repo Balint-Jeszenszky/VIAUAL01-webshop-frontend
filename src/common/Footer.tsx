@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import axios from 'axios';
-import { CurrencyContext } from './CurrencyContext';
+import { IUserContext, UserContext } from './UserContext';
+import webshopAPI, { actions } from './webshopAPI';
 
 interface IFooter {
-    setCurrency(c: string): void;
+    updateUserCtx(c: IUserContext): void;
 }
 
 const Footer: React.FC<IFooter> = props => {
     const [loaded, setLoaded] = useState<boolean>(false);
     const currencies = useRef<string[]>([]);
-    const current = useContext(CurrencyContext);
+    const userCtx = useContext(UserContext);
 
     useEffect(() => {
-        axios.get('http://192.168.0.2:3000/api/currencies')
+        webshopAPI(actions.GET, '/currencies')
         .then(res => {
             currencies.current = res.data;
             setLoaded(true);
@@ -24,7 +24,9 @@ const Footer: React.FC<IFooter> = props => {
             <div className="container p-3">
                 <span>Available currencies: </span>
                 {loaded && currencies.current.map((e, i) => (
-                    <span className={`pl-1 ${(e === current) ? 'selected' : 'available'}`} onClick={() => props.setCurrency(e)} key={`currency${i}`}>{e} </span>)
+                    <span className={`pl-1 ${(e === userCtx.currency) ? 'selected' : 'available'}`} 
+                        onClick={() => props.updateUserCtx({ currency: e })} key={`currency${i}`}>{e}
+                    </span>)
                 )}
             </div>
         </footer>

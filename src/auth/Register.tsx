@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -26,7 +27,13 @@ const Register: React.FC = () => {
             return;
         }
         
-        //axios post
+        webshopAPI(actions.POST, '/auth/register', {}, {name, username, email, password})
+        .then(res => {
+            setEmail('');
+            setName('');
+            setUsername('');
+            setPassword('');
+        });
     } 
 
     return (

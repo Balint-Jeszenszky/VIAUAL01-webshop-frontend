@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
-import axios from 'axios';
-import { CurrencyContext } from '../common/CurrencyContext';
 import formatPrice from '../common/formatPrice';
 import { UserContext } from '../common/UserContext';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 const Product: React.FC = () => {
     const params: {id: string} = useParams();
@@ -12,12 +11,10 @@ const Product: React.FC = () => {
     let product = useRef<ProductModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
     const [added, setAdded] = useState<boolean>(false);
-    const currency = useContext(CurrencyContext);
-
-    const userId = useContext(UserContext);
+    const userCtx = useContext(UserContext);
 
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/product/${params.id}`)
+        webshopAPI(actions.GET, `/product/${params.id}`, userCtx)
         .then(res => {
             product.current = res.data;
             setLoaded(true);
@@ -29,7 +26,7 @@ const Product: React.FC = () => {
     }
 
     const addToCart = () => {
-        axios.post(`http://192.168.0.2:3000/api/cart/${userId}`, {productId: product.current?.id, amount: quantity})
+        webshopAPI(actions.POST, `/cart/${userCtx.userId}`, userCtx, {productId: product.current?.id, amount: quantity})
         .then(res => {setAdded(true)});
     }
 
@@ -44,7 +41,7 @@ const Product: React.FC = () => {
                     </div>
                     <div className='col-12 col-md-6 d-flex align-items-start flex-column'>
                         <h1 className='mb-auto'>{product.current?.name}</h1>
-                        <h2>{formatPrice(product.current!.price[currency])} {currency}</h2>
+                        <h2>{formatPrice(product.current!.price[userCtx.currency!])} {userCtx.currency}</h2>
                         <p>Stock: {product.current?.stock} pieces</p>
                         <form>
                             <div className='input-group input-group-sm'>

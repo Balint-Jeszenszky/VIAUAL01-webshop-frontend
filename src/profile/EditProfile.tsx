@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { UserModel, UserData } from '../common/Models';
-import axios from 'axios';
 import { UserContext } from '../common/UserContext';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 const EditProfile: React.FC = () => {
     const user = useRef<UserModel>();
@@ -16,18 +16,18 @@ const EditProfile: React.FC = () => {
     const [confirmPass, setConfirmPass] = useState<string>('');
     const [saved, setSaved] = useState<boolean>(false);
 
-    const userID = useContext(UserContext);
+    const userCtx = useContext(UserContext);
 
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/user/${userID}`)
-            .then(res => {
-                user.current = res.data;
-                setName(res.data.name);
-                setUsername(res.data.username);
-                setEmail(res.data.email);
-                setAddress(res.data.address);
-                setPhone(res.data.phoneNumber);
-            });
+        webshopAPI(actions.GET, `/user/${userCtx.userId}`, userCtx)
+        .then(res => {
+            user.current = res.data;
+            setName(res.data.name);
+            setUsername(res.data.username);
+            setEmail(res.data.email);
+            setAddress(res.data.address);
+            setPhone(res.data.phoneNumber);
+        });
     }, []);
 
     const save = () => {
@@ -44,7 +44,7 @@ const EditProfile: React.FC = () => {
             data.confirmPassword = confirmPass;
         }
 
-        axios.put(`http://192.168.0.2:3000/api/user/${userID}`, data)
+        webshopAPI(actions.PUT, `/user/${userCtx.userId}`, userCtx, data)
         .then(() => setSaved(true))
         .catch(res => {});
     }

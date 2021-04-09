@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ListItem } from '../common/Models';
-import axios from 'axios';
-import { CurrencyContext } from '../common/CurrencyContext';
 import { UserContext } from '../common/UserContext';
 import formatPrice from '../common/formatPrice';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 const Cart: React.FC = () => {
     const [cart, setCart] = useState<ListItem[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
     const [btntype, setBtntype] = useState<string>('btn-primary');
-    const currency = useContext(CurrencyContext);
-    const userId = useContext(UserContext);
+    const userCtx = useContext(UserContext);
 
     useEffect(() => {
-        axios.get(`http://192.168.0.2:3000/api/cart/${userId}`)
+        webshopAPI(actions.GET, `/cart/${userCtx.userId}`, userCtx)
         .then(res => {
             setCart(res.data);
             setLoaded(true);
@@ -25,7 +23,7 @@ const Cart: React.FC = () => {
         const data = cart.map(e => {
             return {id: e.product.id, amount: e.amount};
         });
-        axios.put(`http://192.168.0.2:3000/api/cart/${userId}`, data)
+        webshopAPI(actions.PUT, `/cart/${userCtx.userId}`, userCtx, data)
         .then(res => {
             setBtntype('btn-success');
             setCart(cart.filter(e => e.amount > 0));
@@ -56,15 +54,15 @@ const Cart: React.FC = () => {
                         {loaded && cart.map((e, i) => (
                             <tr key={`orderRow${e.product.id}`}>
                                 <td><Link to={`/product/${e.product.id}`}>{e.product.name}</Link></td>
-                                <td>{e.product.price[currency]} {currency}</td>
+                                <td>{e.product.price[userCtx.currency!]} {userCtx.currency}</td>
                                 <td className='w-25'><input type="number" className="form-control" value={e.amount} onChange={e => onAmountChange(e, i)} /></td>
-                                <td>{formatPrice(e.amount * e.product.price[currency])} {currency}</td>
+                                <td>{formatPrice(e.amount * e.product.price[userCtx.currency!])} {userCtx.currency}</td>
                             </tr>
                         ))}
                         <tr>
                             <td colSpan={2}><button className={`btn ${btntype}`} onClick={updateCart}>Update</button></td>
                             <td  className='text-right'>Total:</td>
-                            <td>{formatPrice(cart.map(e => e.amount * e.product.price[currency]).reduce((acc, cur) => acc + cur, 0))} {currency}</td>
+                            <td>{formatPrice(cart.map(e => e.amount * e.product.price[userCtx.currency!]).reduce((acc, cur) => acc + cur, 0))} {userCtx.currency}</td>
                         </tr>
                     </tbody>
                 </table>

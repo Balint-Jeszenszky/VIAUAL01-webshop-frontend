@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
+import { IUserContext } from '../common/UserContext';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 interface ILogin {
-    setLoggedin(params: boolean): void;
-    setUserID(id: string): void;
+    updateUserCtx(newCtx: IUserContext): void;
 }
 
 const Login: React.FC<ILogin> = props => {
@@ -18,9 +19,16 @@ const Login: React.FC<ILogin> = props => {
     }
 
     const login = () => {
-        //axios post
-        props.setUserID('6054be185572f1d30f0e0ff7');
-        props.setLoggedin(true);
+        webshopAPI(actions.POST, '/auth/login', {}, { username, password })
+        .then(res => {
+            const data = JSON.parse(atob(res.data.accessToken.split('.')[1]));
+            props.updateUserCtx({
+                accessToken: res.data.accessToken,
+                refreshToken: res.data.refreshToken,
+                userId: data.userId,
+                tokenExpire: data.exp
+            });
+        });
     } 
 
     return (

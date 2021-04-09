@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import axios from 'axios';
 import Product from './Product';
 import { Link } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
-import { CurrencyContext } from '../common/CurrencyContext';
 import formatPrice from '../common/formatPrice';
+import { UserContext } from '../common/UserContext';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 const Recommended: React.FC = () => {
     let products = useRef<ProductModel[]>([]);
     let specialOffer = useRef<ProductModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
     const link = `/product/${specialOffer.current?.id}`;
-    const currency = useContext(CurrencyContext);
+    const userCtx = useContext(UserContext);
 
     useEffect(() => {
-        axios.get('http://192.168.0.2:3000/api/products')
+        webshopAPI(actions.GET, '/products', userCtx)
         .then(res => {
             specialOffer.current = res.data[Math.floor(Math.random() * res.data.length)];
             products.current = res.data.filter((e: ProductModel) => e !== specialOffer.current);
@@ -42,7 +42,7 @@ const Recommended: React.FC = () => {
                         </div>
                         <div className='card-footer d-flex justify-content-between'>
                             <Link to={link} className='card-link smaller'><span className='dark-link'>Details</span></Link>
-                            <span>{formatPrice(specialOffer.current!.price[currency])} {currency}</span>
+                            <span>{formatPrice(specialOffer.current!.price[userCtx.currency!])} {userCtx.currency}</span>
                         </div>
                     </div>
 
@@ -60,7 +60,7 @@ const Recommended: React.FC = () => {
                         </div>
                         <div className='card-footer d-flex justify-content-between'>
                             <Link to={link} className='card-link smaller'><span className='dark-link'>Details</span></Link>
-                            <span>{formatPrice(specialOffer.current!.price[currency])} {currency}</span>
+                            <span>{formatPrice(specialOffer.current!.price[userCtx.currency!])} {userCtx.currency}</span>
                         </div>
                     </div>
                 </header>
