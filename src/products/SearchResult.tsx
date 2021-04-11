@@ -12,9 +12,9 @@ const Products: React.FC = () => {
     const params = match.params as {query: string, page: string};
 
     useEffect(() => {
+        setLoaded(false);
         webshopAPI(actions.GET, `/products/search/${params.query}/page/${params.page}`)
         .then(res => {
-            setLoaded(false);
             products.current = res.data;
             setLoaded(true);
         });

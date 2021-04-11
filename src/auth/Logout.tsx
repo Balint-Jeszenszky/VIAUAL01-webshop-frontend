@@ -11,6 +11,7 @@ const Logout: React.FC<ILogout> = props => {
     const userCtx = useContext(UserContext);
 
     useEffect(() => {
+        sessionStorage.clear();
         webshopAPI(actions.DELETE, '/auth/logout', userCtx)
         .then(res => {
             props.updateUserCtx({

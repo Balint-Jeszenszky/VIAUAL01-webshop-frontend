@@ -87,10 +87,11 @@ const Navbar: React.FC<INavbar> = props => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
                 <div className="flex-grow-1 d-flex">
-                    <form className="form-inline my-2 my-lg-0 flex-grow-1 flex-lg-grow-0 flex-nowrap mx-0 mx-lg-auto">
+                    <form className="form-inline my-2 my-lg-0 flex-grow-1 flex-lg-grow-0 flex-nowrap mx-0 mx-lg-auto" 
+                        onSubmit={e => {e.preventDefault(); document.getElementById('searchBtn')?.click(); return false;}}>
                         <input className="form-control mr-2" type="search" placeholder="Search" aria-label="Search" onChange={onQueryChange} value={query} />
                         <Link to={`/search/${query.trim().replace(/\s\s+/g, ' ').replaceAll(' ', '+')}/page/1`} onClick={closeNavbar}>
-                            <button className="btn btn-outline-light my-2 my-sm-0" type="button">
+                            <button className="btn btn-outline-light my-2 my-sm-0" type="button" id="searchBtn">
                                 Search
                             </button>
                         </Link>

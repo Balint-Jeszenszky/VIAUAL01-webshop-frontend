@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Auth from './auth/Auth';
 import Navbar from './common/Navbar';
@@ -17,6 +17,7 @@ import { IUserContext, UserContext } from './common/UserContext';
 import { CategoriesContext } from './common/CategoriesContext';
 import { CategoryModel } from './common/Models';
 import './App.css';
+import { refreshLogin } from './common/webshopAPI';
 
 const App: React.FC = () => {
     const [userCtx, setUserCtx] = useState<IUserContext>({currency: 'HUF'});
@@ -26,6 +27,21 @@ const App: React.FC = () => {
         const currentCtx = Object.assign({}, userCtx);
         setUserCtx(Object.assign(currentCtx, newCtx));
     }
+
+    useEffect(() => {
+        const refreshToken = sessionStorage.getItem('refreshToken');
+        if (refreshToken) {
+            userCtx.refreshToken = refreshToken;
+            refreshLogin(userCtx).then(() => {
+                if (userCtx.accessToken) {
+                    const userId = JSON.parse(atob(userCtx.accessToken.split('.')[1])).userId;
+                    updateUserCtx({userId});
+                }
+            }).catch(() => {
+                sessionStorage.clear();
+            });
+        }
+    }, []);
 
     return (
         <UserContext.Provider value={userCtx}>

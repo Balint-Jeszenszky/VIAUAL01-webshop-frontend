@@ -13,14 +13,19 @@ function headers(accessToken?: string) {
     }
 }
 
-export default function webshopAPI(method: actions, endpoint: string, userCtx?: IUserContext, data?: any) {
+export async function refreshLogin(userCtx: IUserContext) {
+    const res = await axios.post(`${baseUrl}/auth/refreshToken`, {refreshToken: userCtx.refreshToken});
+    if (res.status >= 400) throw new Error();
+    sessionStorage.setItem('accessToken', res.data.accessToken);
+    sessionStorage.setItem('refreshToken', res.data.refreshToken);
+    userCtx.accessToken = res.data.accessToken;
+    userCtx.refreshToken = res.data.refreshToken;
+    userCtx.tokenExpire = JSON.parse(atob(res.data.accessToken.split('.')[1])).exp;
+}
+
+export default async function webshopAPI(method: actions, endpoint: string, userCtx?: IUserContext, data?: any) {
     if (userCtx?.tokenExpire && userCtx.tokenExpire < Date.now() / 1000 + 5) {
-        axios.post(`${baseUrl}/auth/refreshToken`, {refreshToken: userCtx?.refreshToken}, headers(userCtx?.accessToken))
-        .then(res => {
-            userCtx.accessToken = res.data.accessToken;
-            userCtx.refreshToken = res.data.refreshToken;
-            userCtx.tokenExpire = JSON.parse(atob(res.data.accessToken.split('.')[1])).exp;
-        });
+        await refreshLogin(userCtx);
     }
 
     switch (method) {

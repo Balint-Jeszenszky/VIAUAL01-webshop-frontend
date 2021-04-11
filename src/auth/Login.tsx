@@ -28,6 +28,10 @@ const Login: React.FC<ILogin> = props => {
                 userId: data.userId,
                 tokenExpire: data.exp
             });
+            sessionStorage.setItem('refreshToken', res.data.refreshToken);
+            sessionStorage.setItem('accessToken', res.data.accessToken);
+            const event = new Event('login');
+            window.dispatchEvent(event);
         });
     } 
 
