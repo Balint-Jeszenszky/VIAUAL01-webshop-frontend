@@ -54,18 +54,19 @@ const Cart: React.FC = () => {
                         {loaded && cart.map((e, i) => (
                             <tr key={`orderRow${e.product.id}`}>
                                 <td><Link to={`/product/${e.product.id}`}>{e.product.name}</Link></td>
-                                <td>{e.product.price[userCtx.currency!]} {userCtx.currency}</td>
+                                <td>{formatPrice(e.product.price[userCtx.currency!])} {userCtx.currency}</td>
                                 <td className='w-25'><input type="number" className="form-control" value={e.amount} onChange={e => onAmountChange(e, i)} /></td>
                                 <td>{formatPrice(e.amount * e.product.price[userCtx.currency!])} {userCtx.currency}</td>
                             </tr>
                         ))}
                         <tr>
                             <td colSpan={2}><button className={`btn ${btntype}`} onClick={updateCart}>Update</button></td>
-                            <td  className='text-right'>Total:</td>
+                            <td className='text-right'>Total:</td>
                             <td>{formatPrice(cart.map(e => e.amount * e.product.price[userCtx.currency!]).reduce((acc, cur) => acc + cur, 0))} {userCtx.currency}</td>
                         </tr>
                     </tbody>
                 </table>
+                <Link to="/confirmorder" className="float-right pr-5"><button className='btn btn-primary' disabled={!cart.length}>Order</button></Link>
             </div>}
         </>
     );

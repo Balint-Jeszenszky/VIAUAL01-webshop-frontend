@@ -26,12 +26,16 @@ const Login: React.FC<ILogin> = props => {
                 accessToken: res.data.accessToken,
                 refreshToken: res.data.refreshToken,
                 userId: data.userId,
-                tokenExpire: data.exp
+                tokenExpire: data.exp,
+                role: res.data.role
             });
             sessionStorage.setItem('refreshToken', res.data.refreshToken);
             sessionStorage.setItem('accessToken', res.data.accessToken);
             const event = new Event('login');
             window.dispatchEvent(event);
+        })
+        .catch(res => {
+            setWronCredentials(true);
         });
     } 
 

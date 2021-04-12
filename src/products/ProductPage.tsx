@@ -4,19 +4,23 @@ import { ProductModel } from '../common/Models';
 import formatPrice from '../common/formatPrice';
 import { UserContext } from '../common/UserContext';
 import webshopAPI, { actions } from '../common/webshopAPI';
+import { CategoriesContext } from '../common/CategoriesContext';
 
 const Product: React.FC = () => {
     const params: {id: string} = useParams();
     const [quantity, setQuantity] = useState<number>(1);
-    let product = useRef<ProductModel>();
+    const product = useRef<ProductModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
     const [added, setAdded] = useState<boolean>(false);
     const userCtx = useContext(UserContext);
+    const categories = useContext(CategoriesContext);
+    const category = useRef<string>('');
 
     useEffect(() => {
         webshopAPI(actions.GET, `/product/${params.id}`, userCtx)
         .then(res => {
             product.current = res.data;
+            category.current = categories.find(e => e.id === product.current?.categoryID)!.name;
             setLoaded(true);
         });
     }, []);
@@ -34,7 +38,7 @@ const Product: React.FC = () => {
         <>
             {!loaded && <div className='container'><div className='loader'></div></div> }
             {loaded && <div className='container mt-3'>
-                <p><Link to='/'>Home</Link> {' > '} <Link to={`/category/${product.current?.categoryID}/page/1`}>{product.current?.categoryID}</Link></p>
+                <p><Link to='/'>Home</Link> {' > '} <Link to={`/category/${category.current}/page/1`}>{category.current}</Link></p>
                 <div className='row'>
                     <div className='col-12 col-md-6'>
                         <img className='img-thumbnail' src={`/images/${product.current?.imageURL}`} alt={product.current?.name} />
@@ -46,8 +50,8 @@ const Product: React.FC = () => {
                         <form>
                             <div className='input-group input-group-sm'>
                                 <label htmlFor="order-quantity">Quantity:</label>
-                                <input className={`form-control mx-1${added ? ' is-valid' : ''}`} type="number" name="order-quantity" id="order-quantity" onChange={onQuantityChange} value={quantity} />
-                                <button className='btn btn-sm btn-primary' type="button" onClick={addToCart}><i className="fas fa-shopping-cart"></i></button>
+                                <input className={`form-control mx-1${added ? ' is-valid' : ''}`} disabled={!userCtx.userId} type="number" name="order-quantity" id="order-quantity" onChange={onQuantityChange} value={quantity} />
+                                <button className='btn btn-sm btn-primary' disabled={!userCtx.userId} type="button" onClick={addToCart}><i className="fas fa-shopping-cart"></i></button>
                             </div>
                         </form>
                     </div>

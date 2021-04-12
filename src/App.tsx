@@ -18,12 +18,18 @@ import { CategoriesContext } from './common/CategoriesContext';
 import { CategoryModel } from './common/Models';
 import './App.css';
 import { refreshLogin } from './common/webshopAPI';
+import Loading from './common/Loading';
+import ConfirmOrder from './order/ConfirmOrder';
 
 const App: React.FC = () => {
     const [userCtx, setUserCtx] = useState<IUserContext>({currency: 'HUF'});
     const [categories, setCategories] = useState<CategoryModel[]>([]);
+    const [loaded, setLoaded] = useState<boolean>(false);
 
     const updateUserCtx = (newCtx: IUserContext) => {
+        if (newCtx.currency) {
+            localStorage.setItem('currency', newCtx.currency);
+        }
         const currentCtx = Object.assign({}, userCtx);
         setUserCtx(Object.assign(currentCtx, newCtx));
     }
@@ -34,24 +40,38 @@ const App: React.FC = () => {
             userCtx.refreshToken = refreshToken;
             refreshLogin(userCtx).then(() => {
                 if (userCtx.accessToken) {
-                    const userId = JSON.parse(atob(userCtx.accessToken.split('.')[1])).userId;
-                    updateUserCtx({userId});
+                    const user = JSON.parse(atob(userCtx.accessToken.split('.')[1]));
+                    updateUserCtx({userId: user.userId, role: user.role});
                 }
             }).catch(() => {
                 sessionStorage.clear();
+            })
+            .finally(() => {
+                setLoaded(true);
             });
+        } else {
+            setLoaded(true);
+        }
+        const currency = localStorage.getItem('currency');
+        if (currency) {
+            setUserCtx({currency});
         }
     }, []);
 
     return (
         <UserContext.Provider value={userCtx}>
             <Navbar loggedIn={!!userCtx.userId} setCategories={setCategories} />
-            <Switch>
+            {!loaded && <Loading /> }
+            {loaded && <Switch>
                 <Route exact path='/'>
                     <Recommended />
                 </Route>
                 <Route exact path='/admin'>
-                    {userCtx.userId === 'ADMIN' ? <Admin /> : <Redirect to='/' />}
+                    {userCtx.role === 'ADMIN' ? 
+                        <CategoriesContext.Provider value={categories}>
+                            <Admin />
+                        </CategoriesContext.Provider>
+                        : <Redirect to='/' />}
                 </Route>
                 <Route exact path='/auth'>
                     {userCtx.userId ? <Redirect to='/' /> : <Auth updateUserCtx={updateUserCtx} />}
@@ -59,16 +79,21 @@ const App: React.FC = () => {
                 <Route exact path='/cart'>
                     {userCtx.userId ? <Cart /> : <Redirect to='/' />}
                 </Route>
+                <Route exact path='/confirmorder'>
+                    {userCtx.userId ? <ConfirmOrder /> : <Redirect to='/' />}
+                </Route>
                 <Route exact path='/category/:id/page/:page'>
                     <CategoriesContext.Provider value={categories}>
-                        <Products />
+                        {categories.length && <Products />}
                     </CategoriesContext.Provider>
                 </Route>
                 <Route exact path='/order/:id'>
                     {userCtx.userId ? <Order /> : <Redirect to='/' />}
                 </Route>
                 <Route exact path='/product/:id'>
-                    <ProductPage />
+                    <CategoriesContext.Provider value={categories}>
+                        {categories.length && <ProductPage />}
+                    </CategoriesContext.Provider>
                 </Route>
                 <Route exact path='/profile'>
                     {userCtx.userId ? <Profile /> : <Redirect to='/' />}
@@ -85,7 +110,7 @@ const App: React.FC = () => {
                 <Route path='/'>
                     <Redirect to="/" />
                 </Route>
-            </Switch>
+            </Switch>}
             <Footer updateUserCtx={updateUserCtx} />
         </UserContext.Provider>
     );

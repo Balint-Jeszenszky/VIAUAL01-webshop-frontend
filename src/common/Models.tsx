@@ -36,7 +36,8 @@ export type UserModel = {
     address: string,
     phoneNumber: string,
     orders: Order[],
-    cart: ListItem[]
+    cart: ListItem[],
+    role: 'ADMIN' | 'USER'
 };
 
 export type UserData = {
@@ -50,7 +51,7 @@ export type UserData = {
 }
 
 type MapsAPIModel = {
-    APIKey: string,
+    APIKey?: string,
     coords: { lng: number, lat: number }
 }
 

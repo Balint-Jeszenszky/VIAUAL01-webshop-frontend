@@ -18,7 +18,8 @@ const Logout: React.FC<ILogout> = props => {
                 accessToken: undefined,
                 refreshToken: undefined,
                 userId: undefined,
-                tokenExpire: undefined
+                tokenExpire: undefined,
+                role: undefined
             });
         });
     }, []);

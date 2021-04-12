@@ -12,13 +12,15 @@ const Products: React.FC = () => {
     const [loaded, setLoaded] = useState<boolean>(false);
     const match = useRouteMatch();
     const params = match.params as {id: string, page: string};
-    const pages = Math.ceil(useContext(CategoriesContext).filter(e => e.id === params.id)[0]?.productNumber / 18);
+    const categories = useContext(CategoriesContext);
+    const category = categories.find(e => e.name === params.id);
+    const pages = Math.ceil(category?.productNumber! / 18);
     const userCtx = useContext(UserContext);
 
     useEffect(() => {
         setLoaded(false);
         products.current = [];
-        webshopAPI(actions.GET, `/products/${params.id}/page/${params.page}`, userCtx)
+        webshopAPI(actions.GET, `/products/${category?.id}/page/${params.page}`, userCtx)
         .then(res => {
             products.current = res.data;
             setLoaded(true);

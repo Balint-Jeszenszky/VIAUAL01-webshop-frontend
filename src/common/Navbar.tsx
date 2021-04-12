@@ -39,7 +39,7 @@ const Navbar: React.FC<INavbar> = props => {
                     </span>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                         {loaded && categories.current.map((e, i) => (
-                            <Link className="dropdown-item" to={`/category/${e.id}/page/1`} key={`cat${e.id}`}
+                            <Link className="dropdown-item" to={`/category/${e.name}/page/1`} key={`cat${e.id}`}
                                 onClick={closeNavbar}>
                                 {e.name}
                             </Link>))

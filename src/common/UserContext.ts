@@ -6,6 +6,7 @@ export interface IUserContext {
     tokenExpire?: number;
     userId?: string;
     currency?: string;
+    role?: 'ADMIN' | 'USER';
 }
 
 export const UserContext = createContext<IUserContext>({});
