@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Auth from './auth/Auth';
 import Navbar from './common/Navbar';
@@ -17,14 +17,15 @@ import { IUserContext, UserContext } from './common/UserContext';
 import { CategoriesContext } from './common/CategoriesContext';
 import { CategoryModel } from './common/Models';
 import './App.css';
-import { refreshLogin } from './common/webshopAPI';
+import webshopAPI, { actions, refreshLogin } from './common/webshopAPI';
 import Loading from './common/Loading';
 import ConfirmOrder from './order/ConfirmOrder';
 
 const App: React.FC = () => {
-    const [userCtx, setUserCtx] = useState<IUserContext>({currency: 'HUF'});
+    const [userCtx, setUserCtx] = useState<IUserContext>({});
     const [categories, setCategories] = useState<CategoryModel[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
+    const currencies = useRef<string[]>([]);
 
     const updateUserCtx = (newCtx: IUserContext) => {
         if (newCtx.currency) {
@@ -36,25 +37,44 @@ const App: React.FC = () => {
 
     useEffect(() => {
         const refreshToken = sessionStorage.getItem('refreshToken');
+        const currency = localStorage.getItem('currency') || 'HUF';
+        let ready = false;
+        webshopAPI(actions.GET, '/currencies')
+        .then(res => {
+            currencies.current = res.data;
+            if (!currencies.current.find(e => e === currency)) {
+                updateUserCtx({currency: currencies.current[0]});
+            }
+            if (ready) {
+                setLoaded(true);
+            } else {
+                ready = true;
+            }
+        });
         if (refreshToken) {
             userCtx.refreshToken = refreshToken;
             refreshLogin(userCtx).then(() => {
                 if (userCtx.accessToken) {
                     const user = JSON.parse(atob(userCtx.accessToken.split('.')[1]));
-                    updateUserCtx({userId: user.userId, role: user.role});
+                    updateUserCtx({userId: user.userId, role: user.role, currency});
                 }
             }).catch(() => {
                 sessionStorage.clear();
             })
             .finally(() => {
-                setLoaded(true);
+                if (ready) {
+                    setLoaded(true);
+                } else {
+                    ready = true;
+                }
             });
         } else {
-            setLoaded(true);
-        }
-        const currency = localStorage.getItem('currency');
-        if (currency) {
-            setUserCtx({currency});
+            updateUserCtx({currency});
+            if (ready) {
+                setLoaded(true);
+            } else {
+                ready = true;
+            }
         }
     }, []);
 
@@ -111,7 +131,7 @@ const App: React.FC = () => {
                     <Redirect to="/" />
                 </Route>
             </Switch>}
-            <Footer updateUserCtx={updateUserCtx} />
+            <Footer updateUserCtx={updateUserCtx} currencies={currencies.current} />
         </UserContext.Provider>
     );
 }

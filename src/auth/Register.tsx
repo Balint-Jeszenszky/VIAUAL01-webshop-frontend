@@ -47,7 +47,6 @@ const Register: React.FC = () => {
             setSuccess(true);
         })
         .catch(err => {
-            console.log(err.response)
             const errors = (err.response.data.errors || []) as string[];
             if (errors) {
                 setAlredyRegisteredEmail(!!errors.find(e => e === 'email_reg'));

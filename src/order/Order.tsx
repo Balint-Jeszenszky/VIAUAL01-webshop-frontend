@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { OrderModel } from '../common/Models';
-import axios from 'axios';
 import formatPrice from '../common/formatPrice';
 import { UserContext } from '../common/UserContext';
 import webshopAPI, { actions } from '../common/webshopAPI';

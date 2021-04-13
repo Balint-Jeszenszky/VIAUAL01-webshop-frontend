@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Redirect } from 'react-router';
-import { UserData, UserModel } from '../common/Models';
+import { UserData } from '../common/Models';
 import { UserContext } from '../common/UserContext';
 import webshopAPI, { actions } from '../common/webshopAPI';
 
 const ConfirmOrder: React.FC = () => {
-    const user = useRef<UserModel>();
+    const user = useRef<UserData>();
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');

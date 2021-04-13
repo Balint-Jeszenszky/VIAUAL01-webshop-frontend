@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CategoriesContext } from '../common/CategoriesContext';
-import Loading from '../common/Loading';
 import { UserContext } from '../common/UserContext';
 import webshopAPI, { actions } from '../common/webshopAPI';
 
@@ -13,7 +12,6 @@ const CategoryManager: React.FC = () => {
 
     const userCtx = useContext(UserContext);
     const categories = useContext(CategoriesContext);
-    console.log(categories);
 
     const onAdd = () => {
         webshopAPI(actions.POST, '/category', userCtx, {name: newCategoryName})
@@ -25,7 +23,6 @@ const CategoryManager: React.FC = () => {
 
     const selectCategory = (e:  React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCategoryId(e.target.value);
-        console.log(e.target.value);
     }
 
     const cancelEdit = () => {
