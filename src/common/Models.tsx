@@ -62,3 +62,9 @@ export type OrderModel = {
     products: ListItem[],
     mapsAPI: MapsAPIModel | undefined
 };
+
+export type CompanyModel = {
+    name: string, 
+    id: string, 
+    accessToken: string
+};

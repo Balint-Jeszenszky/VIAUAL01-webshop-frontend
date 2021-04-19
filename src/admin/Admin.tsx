@@ -3,6 +3,7 @@ import OrderManager from './OrderManager';
 import CurrencyManager from './CurrencyManager';
 import CategoryManager from './CategoryManager';
 import ProductManager from './ProductManager';
+import DeliveryManager from './DeliveryManager';
 
 const Admin: React.FC = () => {
 
@@ -13,6 +14,7 @@ const Admin: React.FC = () => {
                 <CurrencyManager />
                 <CategoryManager />
                 <ProductManager />
+                <DeliveryManager />
             </div>
         </div>
     );

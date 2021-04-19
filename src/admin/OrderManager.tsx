@@ -22,9 +22,10 @@ const OrderManager: React.FC = () => {
     }, []);
 
     const onOrderChange = (e:  React.ChangeEvent<HTMLSelectElement>) => {
-        setOrder(orders.current.find(o => o.id === e.target.value));
         if (e.target.value === 'Choose...') return setStatus('...');
-        setStatus(order?.mapsAPI ? 'delivery' : 'processing');
+        const o = orders.current.find(o => o.id === e.target.value)
+        setOrder(o);
+        setStatus(o?.mapsAPI ? 'delivery' : 'processing');
     }
 
     const onStatusChange = (e:  React.ChangeEvent<HTMLSelectElement>) => {

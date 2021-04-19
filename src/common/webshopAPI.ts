@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IUserContext } from './UserContext';
 
-export enum actions { GET, POST, PUT, DELETE }
+export enum actions { GET, POST, PUT, PATCH, DELETE }
 
 const baseUrl = 'http://192.168.0.2:3000/api';
 
@@ -35,6 +35,8 @@ export default async function webshopAPI(method: actions, endpoint: string, user
             return axios.post(`${baseUrl}${endpoint}`, data, headers(userCtx?.accessToken));
         case actions.PUT:
             return axios.put(`${baseUrl}${endpoint}`, data, headers(userCtx?.accessToken));
+        case actions.PATCH:
+            return axios.patch(`${baseUrl}${endpoint}`, data, headers(userCtx?.accessToken));
         case actions.DELETE:
             return axios.delete(`${baseUrl}${endpoint}`, headers(userCtx?.accessToken));
     }
