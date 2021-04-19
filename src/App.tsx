@@ -20,6 +20,7 @@ import './App.css';
 import webshopAPI, { actions, refreshLogin } from './common/webshopAPI';
 import Loading from './common/Loading';
 import ConfirmOrder from './order/ConfirmOrder';
+import ProductDetails from './admin/ProductDetails';
 
 const App: React.FC = () => {
     const [userCtx, setUserCtx] = useState<IUserContext>({});
@@ -90,6 +91,13 @@ const App: React.FC = () => {
                     {userCtx.role === 'ADMIN' ? 
                         <CategoriesContext.Provider value={categories}>
                             <Admin />
+                        </CategoriesContext.Provider>
+                        : <Redirect to='/' />}
+                </Route>
+                <Route exact path='/admin/product/:id'>
+                    {userCtx.role === 'ADMIN' ? 
+                        <CategoriesContext.Provider value={categories}>
+                            <ProductDetails />
                         </CategoriesContext.Provider>
                         : <Redirect to='/' />}
                 </Route>

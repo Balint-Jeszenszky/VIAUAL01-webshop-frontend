@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Loading from '../common/Loading';
 import { OrderModel } from '../common/Models';
 import { UserContext } from '../common/UserContext';
-import webshopAPI, {actions} from '../common/webshopAPI';
+import webshopAPI, { actions } from '../common/webshopAPI';
 
 const OrderManager: React.FC = () => {
     const [loaded, setLoaded] = useState<boolean>(false);
@@ -57,7 +58,7 @@ const OrderManager: React.FC = () => {
                     <option selected={status === 'delivery'} value='delivery'>Delivery</option>
                 </select>
                 <button className={`btn ${saved ? 'btn-success' : 'btn-primary'}`} type='button' onClick={onSave}>Save</button>
-                <button className='btn btn-primary ml-2' type='button' >Details</button>
+                <Link to={`/order/${order?.id}`}><button className='btn btn-primary ml-2' type='button' >Details</button></Link>
             </form>}
         </div>
     );

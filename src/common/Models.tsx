@@ -6,10 +6,11 @@ export type ProductModel = {
     id: string,
     name: string,
     description: string,
-    imageURL: string | null,
-    categoryID: string | null,
+    imageURL: string,
+    categoryID: string,
     price: PriceModel,
-    stock: number
+    stock: number,
+    recommended: boolean
 };
 
 type Order = {
