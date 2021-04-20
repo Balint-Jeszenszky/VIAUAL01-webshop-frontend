@@ -41,7 +41,7 @@
                                 applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
                             });
 
-                            await fetch('http://192.168.0.2:3000/api/subscribe', {
+                            await fetch('/api/subscribe', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',

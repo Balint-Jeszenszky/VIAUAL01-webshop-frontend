@@ -76,7 +76,7 @@ const DeliveryManager: React.FC = () => {
                     <button className='btn btn-danger ml-2' type='button' onClick={onDelete}>Delete</button>
                 </div>
                 <input className="form-control w-50" value={selectedCompany?.accessToken || ''} />
-                <button className='btn btn-danger ml-2' type='button' onClick={copy}><i className="fas fa-copy"></i></button>
+                <button className='btn btn-primary ml-2' type='button' onClick={copy}><i className="fas fa-copy"></i></button>
             </form>}
         </div>
     );

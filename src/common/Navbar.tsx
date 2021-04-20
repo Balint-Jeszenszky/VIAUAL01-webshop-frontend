@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import axios from 'axios';
 import { CategoryModel } from '../common/Models';
+import webshopAPI, { actions } from './webshopAPI';
 
 interface INavbar {
     loggedIn: boolean;
@@ -66,7 +67,7 @@ const Navbar: React.FC<INavbar> = props => {
     };
 
     useEffect(() => {
-        axios.get('http://192.168.0.2:3000/api/categories')
+        webshopAPI(actions.GET, '/categories')
         .then(res => {
             categories.current = res.data;
             props.setCategories(res.data);

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Redirect } from 'react-router';
 import { UserData } from '../common/Models';
 import { UserContext } from '../common/UserContext';
 import webshopAPI, { actions } from '../common/webshopAPI';
@@ -10,7 +9,6 @@ const ConfirmOrder: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
     const [phoneNumber, setPhone] = useState<string>('');
-    const [saved, setSaved] = useState<boolean>(false);
 
     const userCtx = useContext(UserContext);
 
@@ -37,16 +35,10 @@ const ConfirmOrder: React.FC = () => {
         .then(() => {
             webshopAPI(actions.POST, `/order/new/${userCtx.userId}`, userCtx, data)
             .then(res => {
-                setSaved(true);
+                window.location.href=res.data.gatewayUrl;
             });
         })
         .catch(err => {});
-    }
-
-    if (saved) {
-        return (
-            <Redirect to='/profile' />
-        );
     }
 
     return (
@@ -69,10 +61,7 @@ const ConfirmOrder: React.FC = () => {
                         <label htmlFor="phoneInput">Phone number</label>
                         <input type="tel" className="form-control" id="phoneInput" onChange={e => setPhone(e.target.value)} value={phoneNumber} />
                     </div>
-                    <div className="form-group bg-info">
-                        <p className="p-5">Payment or something</p>
-                    </div>
-                    <button type="button" className="btn btn-primary float-right" onClick={save}>Save and finnish order</button>
+                    <button type="button" className="btn btn-primary float-right" onClick={save}>Proceed to payment</button>
                 </form>
             </div>
         </div>
