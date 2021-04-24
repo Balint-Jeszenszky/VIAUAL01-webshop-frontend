@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CategoriesContext } from '../common/CategoriesContext';
+import { CategoryModel } from '../common/Models';
 import { UserContext } from '../common/UserContext';
 import webshopAPI, { actions } from '../common/webshopAPI';
 
@@ -9,15 +10,16 @@ const CategoryManager: React.FC = () => {
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [editCategoryName, setEditCategoryName] = useState<string>('');
     const [selectedCategoryId, setSelectedCategoryId] = useState<string>('choose');
+    const [categories, setCategories] = useState<CategoryModel[]>(useContext(CategoriesContext));
 
     const userCtx = useContext(UserContext);
-    const categories = useContext(CategoriesContext);
 
     const onAdd = () => {
         webshopAPI(actions.POST, '/category', userCtx, {name: newCategoryName})
         .then(res => {
             setAdded(true);
             setTimeout(() => setAdded(false), 3000);
+            setCategories([...categories, res.data]);
         })
     }
 
@@ -34,7 +36,7 @@ const CategoryManager: React.FC = () => {
         if (selectedCategoryId !== 'choose') {
             webshopAPI(actions.DELETE, `/category/${selectedCategoryId}`, userCtx)
             .then(res => {
-
+                setCategories(categories.filter(c => c.id !== selectedCategoryId));
             });
         }
     }
@@ -60,7 +62,7 @@ const CategoryManager: React.FC = () => {
             <form className='form-inline' onSubmit={e => {e.preventDefault(); return false;}}>
                 <div className="w-100 mb-2">
                     <input className="form-control w-50" placeholder='Name' value={newCategoryName} onChange={e => setNewCategoryName(e.target.value)} />
-                    <button className={`btn ${added ? 'btn-success' : 'btn-primary'} ml-2`} type='button' onClick={onAdd}>Add</button><br />
+                    <button className={`btn ${added ? 'btn-success' : 'btn-primary'} ml-2`} type='button' onClick={onAdd} disabled={newCategoryName === ''}>Add</button><br />
                 </div>
 
                 <div className="w-100">
@@ -68,8 +70,8 @@ const CategoryManager: React.FC = () => {
                         <option value={'choose'}>Choose...</option>
                         {categories.map(e => (<option value={e.id} key={e.id}>{e.name}</option>))}
                     </select>}
-                    {!editing && <button className='btn btn-primary ml-2' type='button' onClick={edit}>Edit</button>}
-                    {!editing && <button className='btn btn-danger ml-2' type='button' onClick={onDelete}>Delete</button>}
+                    {!editing && <button className='btn btn-primary ml-2' type='button' onClick={edit} disabled={selectedCategoryId === 'choose'}>Edit</button>}
+                    {!editing && <button className='btn btn-danger ml-2' type='button' onClick={onDelete} disabled={selectedCategoryId === 'choose'}>Delete</button>}
 
                     {editing && <input className="form-control w-50" placeholder='Name' value={editCategoryName} onChange={e => setEditCategoryName(e.target.value)} />}
                     {editing && <button className='btn btn-primary ml-2' type='button' onClick={save}>Save</button>}

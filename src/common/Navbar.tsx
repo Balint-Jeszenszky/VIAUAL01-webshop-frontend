@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
-import axios from 'axios';
 import { CategoryModel } from '../common/Models';
+import { UserContext } from './UserContext';
 import webshopAPI, { actions } from './webshopAPI';
 
 interface INavbar {
@@ -14,10 +14,14 @@ const Navbar: React.FC<INavbar> = props => {
     const [loaded, setLoaded] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
     const categories = useRef<CategoryModel[]>([]);
+    const userCtx = useContext(UserContext);
+
+    const admin = { name: 'Admin', path: '/admin', active: useRouteMatch('/admin') !== null };
+    const cart = { name: 'Cart', path: '/cart', active: useRouteMatch('/cart') !== null };
 
     const loggedInPagenames = [
         { name: 'Categories', path: '', active: useRouteMatch('/category') !== null },
-        { name: 'Cart', path: '/cart', active: useRouteMatch('/cart') !== null },
+        userCtx.role === 'ADMIN' ? admin : cart,
         { name: 'Profile', path: '/profile', active: useRouteMatch('/profile') !== null },
         { name: 'Logout', path: '/logout', active: false }
     ];

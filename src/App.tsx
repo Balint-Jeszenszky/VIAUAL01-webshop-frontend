@@ -51,6 +51,9 @@ const App: React.FC = () => {
             } else {
                 ready = true;
             }
+        })
+        .catch(err => {
+            console.log(err);
         });
         if (refreshToken) {
             userCtx.refreshToken = refreshToken;

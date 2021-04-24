@@ -50,7 +50,7 @@ const Login: React.FC<ILogin> = props => {
                 <div className="form-group">
                     <input type="password" className="form-control" placeholder="Password" onChange={onPassChange} value={password} />
                 </div>
-                <div className="text-center form-group">
+                {/* <div className="text-center form-group">
                     <button type="button" className="btn btn-link">Forgot password</button>
                 </div>
                 <div className="text-center form-group">
@@ -58,7 +58,7 @@ const Login: React.FC<ILogin> = props => {
                     <label className="form-check-label" htmlFor="stayloggedin">
                         Stay logged in
                     </label>
-                </div>
+                </div> */}
                 <div className="text-center form-group">
                     <button type="button" className="btn btn-primary" onClick={login}>Login</button>
                 </div>

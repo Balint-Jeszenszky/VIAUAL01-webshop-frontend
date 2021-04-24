@@ -12,6 +12,7 @@ const Product: React.FC = () => {
     const product = useRef<ProductModel>();
     const [loaded, setLoaded] = useState<boolean>(false);
     const [added, setAdded] = useState<boolean>(false);
+    const [invalid, setInvalid] = useState<boolean>(false);
     const userCtx = useContext(UserContext);
     const categories = useContext(CategoriesContext);
     const category = useRef<string>('');
@@ -26,10 +27,25 @@ const Product: React.FC = () => {
     }, []);
 
     const onQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (product.current?.stock && parseInt(e.target.value) > product.current?.stock) {
+            setInvalid(true);
+            return;
+        }
+        if (parseInt(e.target.value) < 1) {
+            return;
+        }
+        setInvalid(false);
         setQuantity(Number.parseInt(e.target.value));
     }
 
     const addToCart = () => {
+        if (product.current?.stock && quantity > product.current?.stock) {
+            setInvalid(true);
+            return;
+        }
+        if (quantity < 0) {
+            return;
+        }
         webshopAPI(actions.POST, `/cart/${userCtx.userId}`, userCtx, {productId: product.current?.id, amount: quantity})
         .then(res => {setAdded(true)});
     }
@@ -48,9 +64,9 @@ const Product: React.FC = () => {
                         <h2>{formatPrice(product.current!.price[userCtx.currency!])} {userCtx.currency}</h2>
                         <p>Stock: {product.current?.stock} pieces</p>
                         <form>
+                            {invalid && <span className="text-danger">You can't buy more than the stock!</span>}
                             <div className='input-group input-group-sm'>
-                                <label htmlFor="order-quantity">Quantity:</label>
-                                <input className={`form-control mx-1${added ? ' is-valid' : ''}`} disabled={!userCtx.userId} type="number" name="order-quantity" id="order-quantity" onChange={onQuantityChange} value={quantity} />
+                                <input className={`form-control mx-1${added ? ' is-valid' : ''}${invalid ? ' is-invalid' : ''}`} disabled={!userCtx.userId} type="number" name="order-quantity" id="order-quantity" onChange={onQuantityChange} value={quantity} />
                                 <button className='btn btn-sm btn-primary' disabled={!userCtx.userId} type="button" onClick={addToCart}><i className="fas fa-shopping-cart"></i></button>
                             </div>
                         </form>

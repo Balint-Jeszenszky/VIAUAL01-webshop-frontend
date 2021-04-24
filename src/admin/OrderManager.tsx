@@ -22,7 +22,11 @@ const OrderManager: React.FC = () => {
     }, []);
 
     const onOrderChange = (e:  React.ChangeEvent<HTMLSelectElement>) => {
-        if (e.target.value === 'Choose...') return setStatus('...');
+        if (e.target.value === 'choose') {
+            setOrder(undefined);
+            setStatus('...');
+            return;
+        }
         const o = orders.current.find(o => o.id === e.target.value)
         setOrder(o);
         setStatus(o?.mapsAPI ? 'delivery' : 'processing');
@@ -50,7 +54,7 @@ const OrderManager: React.FC = () => {
             {!loaded && <Loading />}
             {loaded && <form className='form-inline' onSubmit={e => {e.preventDefault(); return false;}}>
                 <select className='form-control w-100' onChange={onOrderChange}>
-                    <option>Choose...</option>
+                    <option value='choose'>Choose...</option>
                     {orders.current.map(e => (<option value={e.id} key={e.id}>{(new Date(e.date)).toLocaleDateString()} - {e.id}</option>))}
                 </select>
                 <select className='form-control w-100 my-2' onChange={onStatusChange}>
@@ -58,8 +62,8 @@ const OrderManager: React.FC = () => {
                     <option selected={status === 'processing'} value='processing'>Processing</option>
                     <option selected={status === 'delivery'} value='delivery'>Delivery</option>
                 </select>
-                <button className={`btn ${saved ? 'btn-success' : 'btn-primary'}`} type='button' onClick={onSave}>Save</button>
-                <Link to={`/order/${order?.id}`}><button className='btn btn-primary ml-2' type='button' >Details</button></Link>
+                <button className={`btn ${saved ? 'btn-success' : 'btn-primary'}`} type='button' onClick={onSave} disabled={order === undefined}>Save</button>
+                <Link to={`/order/${order?.id}`}><button className='btn btn-primary ml-2' type='button' disabled={order === undefined}>Details</button></Link>
             </form>}
         </div>
     );

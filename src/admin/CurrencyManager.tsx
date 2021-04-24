@@ -60,10 +60,10 @@ const CurrencyManager: React.FC = () => {
 
     const changeEdited = (e:  React.ChangeEvent<HTMLSelectElement>) => {
         const selected = e.target.value;
+        setSelectedEditCurrency(selected);
         const currency = allowedCurrencies.current?.find(e => e.name === selected);
         if (currency) {
             setEditCharge(currency.charge);
-            setSelectedEditCurrency(selected);
         }
     }
 
@@ -80,7 +80,7 @@ const CurrencyManager: React.FC = () => {
                     <input type="number" step="0.01" className="form-control w-50 ml-2" placeholder='Charge' value={addCharge} onChange={e => setAddCharge(parseFloat(e.target.value))} />
                 </div>
                 <div className="w-100">
-                    <button className={`btn ${added ? 'btn-success' : 'btn-primary'} my-2`} type='button' onClick={onAdd}>Add</button><br />
+                    <button className={`btn ${added ? 'btn-success' : 'btn-primary'} my-2`} type='button' onClick={onAdd} disabled={selectedAddCurrency === 'choose'}>Add</button><br />
                 </div>
 
                 <div className="w-100">
@@ -91,8 +91,8 @@ const CurrencyManager: React.FC = () => {
                     <input type="number" step="0.01" className="form-control w-50 ml-2" placeholder='Charge' value={editCharge} onChange={e => setEditCharge(parseFloat(e.target.value))} />
                 </div>
                 <div className="w-100">
-                    <button className={`btn ${saved ? 'btn-success' : 'btn-primary'} mt-2`} type='button' onClick={onSave}>Save</button>
-                    <button className="btn btn-danger mt-2 ml-2" type='button' onClick={onDelete}>Delete</button>
+                    <button className={`btn ${saved ? 'btn-success' : 'btn-primary'} mt-2`} type='button' onClick={onSave} disabled={selectedEditCurrency === 'choose'}>Save</button>
+                    <button className="btn btn-danger mt-2 ml-2" type='button' onClick={onDelete} disabled={selectedEditCurrency === 'choose'}>Delete</button>
                 </div>
             </form>}
         </div>

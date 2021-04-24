@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Product from './Product';
 import { useRouteMatch } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
-import Pager from '../common/Pager';
 import webshopAPI, { actions } from '../common/webshopAPI';
+//import Pager from '../common/Pager';
 
 const Products: React.FC = () => {
     let products = useRef<ProductModel[]>([]);
@@ -27,9 +27,10 @@ const Products: React.FC = () => {
                 <div className='mt-3 p-3'>
                     <div className='row'>
                         {products.current.map((e, i) => <Product product={e} key={`product${i}`} />)}
+                        {(products.current.length === 0) && <h1>No results</h1>}
                     </div>
                 </div>
-                <Pager url={match.path.replace(':query', params.query)} currentPage={parseInt(params.page)} allPages={1}></Pager>
+                {/* <Pager url={match.path.replace(':query', params.query)} currentPage={parseInt(params.page)} allPages={1}></Pager> */}
             </div>}
         </>
     );
