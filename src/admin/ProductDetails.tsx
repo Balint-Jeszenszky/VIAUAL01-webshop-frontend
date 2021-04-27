@@ -13,7 +13,7 @@ const ProductDetails: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [imageURL, setImageURL] = useState<string>('');
     const [imageFile, setImageFile] = useState<File>();
-    const [categoryId, setCategoryId] = useState<string>(categories[0].id);
+    const [categoryId, setCategoryId] = useState<string>(categories[0]?.id);
     const [price, setPrice] = useState<number>(0);
     const [stock, setStock] = useState<number>(0);
     const [recommended, setRecommended] = useState<boolean>(false);

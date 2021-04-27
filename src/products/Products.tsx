@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import Product from './Product';
-import { useRouteMatch } from 'react-router-dom';
+import { useRouteMatch, useHistory } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
 import Pager from '../common/Pager';
 import { CategoriesContext } from '../common/CategoriesContext';
@@ -16,6 +16,11 @@ const Products: React.FC = () => {
     const category = categories.find(e => e.name === params.id);
     const pages = Math.ceil(category?.productNumber! / 18);
     const userCtx = useContext(UserContext);
+    const history = useHistory();
+
+    if (!category) {
+        history.push('/');
+    }
 
     useEffect(() => {
         setLoaded(false);

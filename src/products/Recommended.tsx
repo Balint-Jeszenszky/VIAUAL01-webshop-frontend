@@ -26,7 +26,7 @@ const Recommended: React.FC = () => {
         <>
             {!loaded && <div className='container'><div className='loader'></div></div>}
             {loaded && <div className='container'>
-                <header className='mt-3 col-12'>
+                {specialOffer.current && <header className='mt-3 col-12'>
                     <div className='card product-card d-none d-md-block'>
                         <div className='text-center card-header'>
                             Special offer
@@ -63,7 +63,7 @@ const Recommended: React.FC = () => {
                             <span>{formatPrice(specialOffer.current!.price[userCtx.currency!])} {userCtx.currency}</span>
                         </div>
                     </div>
-                </header>
+                </header>}
 
                 <div className='mt-3 p-3'>
                     <div className='row'>

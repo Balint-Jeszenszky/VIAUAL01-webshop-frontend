@@ -3,7 +3,7 @@ import { IUserContext } from './UserContext';
 
 export enum actions { GET, POST, PUT, PATCH, DELETE }
 
-const baseUrl = '/api';
+const baseUrl = 'http://192.168.0.2:3000/api';
 
 function headers(accessToken?: string) {
     return {

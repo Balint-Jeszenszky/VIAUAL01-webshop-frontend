@@ -84,7 +84,7 @@ const App: React.FC = () => {
 
     return (
         <UserContext.Provider value={userCtx}>
-            <Navbar loggedIn={!!userCtx.userId} setCategories={setCategories} />
+            <Navbar loggedIn={!!userCtx.userId} categories={categories} setCategories={setCategories} />
             {!loaded && <Loading /> }
             {loaded && <Switch>
                 <Route exact path='/'>
@@ -93,7 +93,7 @@ const App: React.FC = () => {
                 <Route exact path='/admin'>
                     {userCtx.role === 'ADMIN' ? 
                         <CategoriesContext.Provider value={categories}>
-                            <Admin />
+                            <Admin setCategories={setCategories} />
                         </CategoriesContext.Provider>
                         : <Redirect to='/' />}
                 </Route>

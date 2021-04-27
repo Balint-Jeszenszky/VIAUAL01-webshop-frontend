@@ -6,6 +6,7 @@ import webshopAPI, { actions } from './webshopAPI';
 
 interface INavbar {
     loggedIn: boolean;
+    categories: CategoryModel[];
     setCategories(categories: CategoryModel[]): void
 };
 
@@ -13,7 +14,7 @@ const Navbar: React.FC<INavbar> = props => {
 
     const [loaded, setLoaded] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
-    const categories = useRef<CategoryModel[]>([]);
+    const categories = props.categories;
     const userCtx = useContext(UserContext);
 
     const admin = { name: 'Admin', path: '/admin', active: useRouteMatch('/admin') !== null };
@@ -43,7 +44,7 @@ const Navbar: React.FC<INavbar> = props => {
                         {page.name}
                     </span>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {loaded && categories.current.map((e, i) => (
+                        {loaded && categories.map(e => (
                             <Link className="dropdown-item" to={`/category/${e.name}/page/1`} key={`cat${e.id}`}
                                 onClick={closeNavbar}>
                                 {e.name}
@@ -73,7 +74,6 @@ const Navbar: React.FC<INavbar> = props => {
     useEffect(() => {
         webshopAPI(actions.GET, '/categories')
         .then(res => {
-            categories.current = res.data;
             props.setCategories(res.data);
             setLoaded(true);
         });

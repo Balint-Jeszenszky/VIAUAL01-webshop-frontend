@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { OrderModel } from '../common/Models';
 import formatPrice from '../common/formatPrice';
 import { UserContext } from '../common/UserContext';
@@ -10,12 +10,16 @@ const Order: React.FC = () => {
     const [loaded, setLoaded] = useState<boolean>(false);
     const params: { id: string } = useParams();
     const userCtx = useContext(UserContext);
+    const history = useHistory();
 
     useEffect(() => {
         webshopAPI(actions.GET, `/order/${params.id}`, userCtx)
         .then(res => {
             order.current = res.data;
             setLoaded(true);
+        })
+        .catch(err => {
+            history.push('/profile');
         });
     }, [params]);
 

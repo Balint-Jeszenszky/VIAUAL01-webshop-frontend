@@ -1,16 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { CategoriesContext } from '../common/CategoriesContext';
 import { CategoryModel } from '../common/Models';
 import { UserContext } from '../common/UserContext';
 import webshopAPI, { actions } from '../common/webshopAPI';
 
-const CategoryManager: React.FC = () => {
+interface ICategoryManager {
+    setCategories(categories: CategoryModel[]): void
+}
+
+const CategoryManager: React.FC<ICategoryManager> = props => {
     const [added, setAdded] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
     const [newCategoryName, setNewCategoryName] = useState<string>('');
     const [editCategoryName, setEditCategoryName] = useState<string>('');
     const [selectedCategoryId, setSelectedCategoryId] = useState<string>('choose');
-    const [categories, setCategories] = useState<CategoryModel[]>(useContext(CategoriesContext));
+    const categories = useContext(CategoriesContext);
 
     const userCtx = useContext(UserContext);
 
@@ -19,8 +23,9 @@ const CategoryManager: React.FC = () => {
         .then(res => {
             setAdded(true);
             setTimeout(() => setAdded(false), 3000);
-            setCategories([...categories, res.data]);
-        })
+            props.setCategories([...categories, res.data]);
+            setNewCategoryName('');
+        });
     }
 
     const selectCategory = (e:  React.ChangeEvent<HTMLSelectElement>) => {
@@ -36,7 +41,7 @@ const CategoryManager: React.FC = () => {
         if (selectedCategoryId !== 'choose') {
             webshopAPI(actions.DELETE, `/category/${selectedCategoryId}`, userCtx)
             .then(res => {
-                setCategories(categories.filter(c => c.id !== selectedCategoryId));
+                props.setCategories([...categories.filter(c => c.id !== selectedCategoryId)]);
             });
         }
     }
@@ -53,6 +58,8 @@ const CategoryManager: React.FC = () => {
             Object.assign(categories.find(e => e.id === selectedCategoryId), {name: editCategoryName}))
         .then(res => {
             setEditing(false);
+            categories[categories.findIndex(c => c.id === selectedCategoryId)].name = editCategoryName;
+            props.setCategories([...categories]);
         })
     }
 

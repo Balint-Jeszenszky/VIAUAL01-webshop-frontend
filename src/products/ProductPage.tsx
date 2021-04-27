@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { ProductModel } from '../common/Models';
 import formatPrice from '../common/formatPrice';
 import { UserContext } from '../common/UserContext';
@@ -16,6 +16,7 @@ const Product: React.FC = () => {
     const userCtx = useContext(UserContext);
     const categories = useContext(CategoriesContext);
     const category = useRef<string>('');
+    const history = useHistory();
 
     useEffect(() => {
         webshopAPI(actions.GET, `/product/${params.id}`, userCtx)
@@ -23,6 +24,9 @@ const Product: React.FC = () => {
             product.current = res.data;
             category.current = categories.find(e => e.id === product.current?.categoryID)!.name;
             setLoaded(true);
+        })
+        .catch(err => {
+            history.push('/');
         });
     }, []);
 
