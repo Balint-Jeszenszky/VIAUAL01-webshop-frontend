@@ -69,14 +69,14 @@ const Order: React.FC = () => {
                         {loaded && order.current?.products.map(e => (
                             <tr key={`orderRow${e.product.id}`}>
                                 <td><Link to={`/product/${e.product.id}`}>{e.product.name}</Link></td>
-                                <td>{formatPrice(e.product.price[userCtx.currency!])} {userCtx.currency}</td>
+                                <td>{formatPrice(e.product.price[order.current!.currency])} {order.current!.currency}</td>
                                 <td className='w-25'>{e.amount}</td>
-                                <td>{formatPrice(e.amount * e.product.price[userCtx.currency!])} {userCtx.currency}</td>
+                                <td>{formatPrice(e.amount * e.product.price[order.current!.currency])} {order.current!.currency}</td>
                             </tr>
                         ))}
                         <tr>
                             <td colSpan={3} className='text-right'>Total:</td>
-                            <td>{formatPrice(order.current!.products.map(e => e.amount * e.product.price[userCtx.currency!]).reduce((acc, cur) => acc + cur))} {userCtx.currency}</td>
+                            <td>{formatPrice(order.current!.products.map(e => e.amount * e.product.price[order.current!.currency]).reduce((acc, cur) => acc + cur))} {order.current!.currency}</td>
                         </tr>
                         <tr>
                             <td colSpan={5}><b>Order status: {order.current?.mapsAPI ? 'Delivery' : 'Processing'}</b></td>

@@ -42,6 +42,7 @@ export type UserModel = {
 };
 
 export type UserData = {
+    userId: string,
     name: string,
     email: string,
     address: string,
@@ -60,6 +61,7 @@ export type OrderModel = {
     id: string,
     date: Date,
     products: ListItem[],
+    currency: string,
     mapsAPI: MapsAPIModel | undefined
 };
 

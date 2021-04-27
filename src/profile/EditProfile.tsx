@@ -32,6 +32,7 @@ const EditProfile: React.FC = () => {
 
     const save = () => {
         const data: UserData = {
+            userId: userCtx.userId!,
             name,
             email,
             address,

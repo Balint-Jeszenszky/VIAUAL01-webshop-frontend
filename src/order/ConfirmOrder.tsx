@@ -25,6 +25,7 @@ const ConfirmOrder: React.FC = () => {
 
     const save = () => {
         const data: UserData = {
+            userId: userCtx.userId!,
             name,
             email,
             address,
@@ -33,9 +34,9 @@ const ConfirmOrder: React.FC = () => {
 
         webshopAPI(actions.PUT, `/user/${userCtx.userId}`, userCtx, data)
         .then(() => {
-            webshopAPI(actions.POST, `/order/new/${userCtx.userId}`, userCtx, data)
+            webshopAPI(actions.POST, `/order/new/${userCtx.userId}`, userCtx, {...data, currency: userCtx.currency})
             .then(res => {
-                window.location.href=res.data.gatewayUrl;
+                window.location.href = res.data.gatewayUrl;
             });
         })
         .catch(err => {});
