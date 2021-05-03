@@ -29,7 +29,7 @@
                     scope: '/'
                 });
 
-                const publicVapidKey = 'BFOq-6TrTTQe9WJYnHTbCvB0pBkmBC719jE5Fm2_8S6YgrGr6XYw8l2p_v9gCs9n26zxQPX34YoJGpHP1LGIpH4';
+                const publicVapidKey = (await (await fetch('/api/subscribe', {method: 'GET'})).json()).publicVapidKey;
 
                 window.addEventListener('login', async event => {
                     if ('PushManager' in window) {
