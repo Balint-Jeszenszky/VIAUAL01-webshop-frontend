@@ -1,3 +1,17 @@
+# Webshop frontend made for BME VIK AUT Project Laboratory - VIAUAL01
+
+##  Információk a projectről:
+
+A projekt BME VIK AUT önálló laboratóriumra készült webshop webalkalmazás frontendjs. A backend itt érhető el: [backend](https://github.com/Balint-Jeszenszky/VIAUAL01-webshop-backend)
+
+## Beüzemelés
+
+- Node.js (12-es verzióval készült)
+- npm (Node.js-el települ, 7-es verzióval készült)
+
+A futtatáshoz, fordításhoz a lenti parancsok használhatóak:
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
